@@ -19,14 +19,32 @@ compartidas + archivos del orbe + contrato de props/estados) optimizado para peg
 Cursor / Copilot / Claude Code y que el asistente recree el orbe adaptándolo al proyecto.
 El prompt se genera en `src/registry/prompt.ts`.
 
-## 3. Registry CLI shadcn + Open in v0 (siguiente fase)
+## 3. Registry CLI shadcn + Open in v0 (implementado)
 
 El estándar del ecosistema para componentes copy-paste es el **registry de shadcn**: se sirve
 cada componente como JSON sobre HTTP y el usuario lo instala con
 `npx shadcn@latest add <url>`, que escribe los archivos, instala dependencias y mergea los
 tokens CSS automáticamente.
 
-### Pasos para habilitarlo
+Ya está montado en este proyecto:
+
+- `registry.json` en la raíz define 6 items: `orb-lib` (utilidades compartidas) y un item por
+  orbe. Cada orbe declara `registryDependencies` apuntando a `orb-lib` y sus `dependencies` npm.
+- `pnpm registry:build` (o el `build` que lo encadena con `next build`) ejecuta `shadcn build`
+  y genera los JSON en `public/r/<name>.json`, servidos como estáticos.
+- Los `files` usan `target` que replica `registry/orbe/<id>/` + `registry/lib/` para preservar
+  los imports relativos sin reescrituras.
+
+Instalación por el usuario:
+
+```bash
+npx shadcn@latest add https://orbe-assistants.vercel.app/r/pulse-orb.json
+```
+
+Cada tarjeta de la galería muestra este comando (copiable) y un botón **Open in v0**
+(`https://v0.dev/chat/api/open?url=<.../r/<id>.json>`).
+
+### Detalle de la configuración
 
 1. **`registry.json`** en la raíz, con un item por orbe. Reusar la metadata de
    `src/registry/registry.ts` (id, dependencies, files) para generarlo:
