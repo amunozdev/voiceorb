@@ -1,0 +1,109 @@
+.orb {
+  --orb-size: 160px;
+  --orb-speed: 1;
+  --orb-color-from: #a78bfa;
+  --orb-color-to: #38bdf8;
+  --orb-level: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  isolation: isolate;
+}
+
+.aura {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--orb-color-from),
+    var(--orb-color-to),
+    color-mix(in oklab, var(--orb-color-from), #fff 20%),
+    var(--orb-color-from)
+  );
+  filter: blur(calc(10px + 10px * var(--orb-level)));
+  opacity: calc(0.7 + 0.3 * var(--orb-level));
+  transform: scale(calc(1 + 0.08 * var(--orb-level)));
+  animation: orb-spin calc(8s / var(--orb-speed)) linear infinite;
+}
+
+.counter {
+  position: absolute;
+  width: 78%;
+  height: 78%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 180deg,
+    transparent,
+    color-mix(in oklab, var(--orb-color-to), transparent 30%),
+    transparent
+  );
+  filter: blur(6px);
+  opacity: 0;
+  animation: orb-spin calc(5s / var(--orb-speed)) linear infinite reverse;
+}
+
+.orb[data-state='connecting'] .counter,
+.orb[data-state='thinking'] .counter {
+  opacity: 0.9;
+}
+
+.sphere {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55), transparent 42%),
+    radial-gradient(circle at 70% 75%, color-mix(in oklab, var(--orb-color-to), transparent 35%), transparent 55%),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 2px 12px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 24px color-mix(in oklab, var(--orb-color-from), transparent 60%),
+    0 8px 30px color-mix(in oklab, var(--orb-color-from), transparent 55%);
+  transform: scale(calc(1 + 0.05 * var(--orb-level)));
+  transition: transform 0.1s linear;
+}
+
+.highlight {
+  position: absolute;
+  top: 22%;
+  left: 26%;
+  width: 26%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent 70%);
+  filter: blur(2px);
+}
+
+.orb[data-state='error'] {
+  --orb-color-from: #fb7185;
+  --orb-color-to: #f43f5e;
+}
+
+.orb[data-state='disabled'] {
+  filter: grayscale(0.85);
+  opacity: 0.5;
+}
+
+.orb[data-state='disabled'] .aura {
+  animation: none;
+}
+
+@keyframes orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura,
+  .counter {
+    animation: none;
+  }
+}

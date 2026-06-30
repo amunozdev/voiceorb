@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --background: #06070d;
+  --foreground: #e7e9f3;
+  --muted: #8b8fa3;
+  --panel: #0e1019;
+  --border: #1d2030;
+  --accent: #6366f1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-panel: var(--panel);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-orb-ring: orb-ring calc(3s / var(--orb-speed, 1)) ease-out infinite;
+  --animate-orb-spin: orb-spin calc(2.4s / var(--orb-speed, 1)) linear infinite;
+  --animate-orb-breathe: orb-breathe calc(4s / var(--orb-speed, 1)) ease-in-out infinite;
+
+  @keyframes orb-ring {
+    0% {
+      transform: scale(1);
+      opacity: calc(0.45 + 0.5 * var(--orb-level, 0));
+    }
+    100% {
+      transform: scale(2.3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes orb-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes orb-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}

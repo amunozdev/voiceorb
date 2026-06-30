@@ -1,0 +1,115 @@
+.orb {
+  --orb-size: 160px;
+  --orb-speed: 1;
+  --orb-color-from: #818cf8;
+  --orb-color-to: #22d3ee;
+  --orb-level: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  isolation: isolate;
+}
+
+.glow {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--orb-color-from), transparent 65%);
+  opacity: calc(0.35 + 0.5 * var(--orb-level));
+  filter: blur(calc(8px + 22px * var(--orb-level)));
+  transition: opacity 0.1s linear;
+}
+
+.core {
+  position: absolute;
+  width: 38%;
+  height: 38%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--orb-color-from), var(--orb-color-to));
+  box-shadow: 0 0 calc(16px + 40px * var(--orb-level))
+    color-mix(in oklab, var(--orb-color-from), transparent 45%);
+  transform: scale(calc(1 + 0.2 * var(--orb-level)));
+  transition: transform 0.08s linear;
+}
+
+.ring {
+  position: absolute;
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--orb-color-to), transparent 25%);
+  opacity: 0;
+  animation: orb-ring calc(3s / var(--orb-speed)) ease-out infinite;
+}
+
+.ring2 {
+  animation-delay: calc(-1s / var(--orb-speed));
+}
+
+.ring3 {
+  animation-delay: calc(-2s / var(--orb-speed));
+}
+
+.arc {
+  position: absolute;
+  width: 54%;
+  height: 54%;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--orb-color-to);
+  border-right-color: color-mix(in oklab, var(--orb-color-from), transparent 40%);
+  opacity: 0;
+  animation: orb-spin calc(1.6s / var(--orb-speed)) linear infinite;
+}
+
+.orb[data-state='connecting'] .arc,
+.orb[data-state='thinking'] .arc {
+  opacity: 1;
+}
+
+.orb[data-state='connecting'] .ring,
+.orb[data-state='disabled'] .ring {
+  opacity: 0;
+  animation: none;
+}
+
+.orb[data-state='error'] {
+  --orb-color-from: #fb7185;
+  --orb-color-to: #f43f5e;
+}
+
+.orb[data-state='disabled'] {
+  filter: grayscale(0.8);
+  opacity: 0.5;
+}
+
+@keyframes orb-ring {
+  0% {
+    transform: scale(1);
+    opacity: calc(0.45 + 0.5 * var(--orb-level));
+  }
+  100% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+
+@keyframes orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring,
+  .arc {
+    animation: none;
+  }
+  .orb[data-state='connecting'] .arc,
+  .orb[data-state='thinking'] .arc {
+    opacity: 0.6;
+  }
+}
