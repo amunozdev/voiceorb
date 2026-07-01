@@ -66,7 +66,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
         </span>
       </header>
 
-      <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,#11131f,#06070d)]">
+      <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,var(--orb-stage-from),var(--orb-stage-to))]">
         <OrbPreview
           id={orb.id}
           state={state}

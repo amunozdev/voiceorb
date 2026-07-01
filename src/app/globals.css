@@ -11,6 +11,8 @@
   --border: #e3e5ef;
   --accent: #6366f1;
   --accent-foreground: #4f46e5;
+  --orb-stage-from: #e9ebf7;
+  --orb-stage-to: #f7f8fc;
 }
 
 .dark {
@@ -22,6 +24,8 @@
   --border: #1d2030;
   --accent: #6366f1;
   --accent-foreground: #a5b4fc;
+  --orb-stage-from: #11131f;
+  --orb-stage-to: #06070d;
 }
 
 @theme inline {
