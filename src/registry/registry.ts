@@ -69,7 +69,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'particles-orb',
     name: 'Particles Orb',
-    tagline: 'A swarm of particles that orbit and breathe around a luminous core.',
+    tagline: 'Hundreds of particles form a rotating 3D sphere that breathes with your voice and scatters into a ring while connecting.',
     tech: 'Canvas',
     dependencies: [],
     defaultColorFrom: '#f0abfc',
