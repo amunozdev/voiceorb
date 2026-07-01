@@ -58,7 +58,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'pixel-orb',
     name: 'Pixel Orb',
-    tagline: 'Esfera de arte pixelado en canvas: cuadrícula que late y ondula con la voz.',
+    tagline: 'Pixel-art sphere on canvas: a grid that pulses and ripples with your voice.',
     tech: 'Canvas',
     dependencies: [],
     defaultColorFrom: '#34d399',
@@ -69,7 +69,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'particles-orb',
     name: 'Particles Orb',
-    tagline: 'Enjambre de partículas que orbitan y respiran alrededor de un núcleo luminoso.',
+    tagline: 'A swarm of particles that orbit and breathe around a luminous core.',
     tech: 'Canvas',
     dependencies: [],
     defaultColorFrom: '#f0abfc',
@@ -82,7 +82,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'equalizer-orb',
     name: 'Equalizer Orb',
-    tagline: 'Barras de ecualizador dentro de un disco que reaccionan al nivel de audio.',
+    tagline: 'Equalizer bars inside a disc that react to the audio level.',
     tech: 'Pure CSS',
     dependencies: [],
     defaultColorFrom: '#38bdf8',
@@ -96,7 +96,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'aurora-orb',
     name: 'Aurora Orb',
-    tagline: 'Velos de aurora boreal que giran y se difuminan sobre un cielo nocturno.',
+    tagline: 'Northern-lights veils that swirl and blur across a night sky.',
     tech: 'Pure CSS',
     dependencies: [],
     defaultColorFrom: '#22d3ee',
@@ -110,7 +110,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'halo-orb',
     name: 'Halo Orb',
-    tagline: 'Halo cónico con anillos orbitales y un núcleo brillante que pulsa.',
+    tagline: 'A conic halo with orbital rings and a bright core that pulses.',
     tech: 'Pure CSS',
     dependencies: [],
     defaultColorFrom: '#818cf8',
