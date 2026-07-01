@@ -9,7 +9,7 @@ interface CopyButtonProps {
   className?: string;
 }
 
-export const CopyButton = ({ value, label = 'Copiar', className }: CopyButtonProps) => {
+export const CopyButton = ({ value, label = 'Copy', className }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -31,7 +31,7 @@ export const CopyButton = ({ value, label = 'Copiar', className }: CopyButtonPro
         className,
       )}
     >
-      {copied ? '✓ Copiado' : label}
+      {copied ? '✓ Copied' : label}
     </button>
   );
 };

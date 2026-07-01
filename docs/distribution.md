@@ -1,29 +1,29 @@
-# Distribución de los orbes
+# Orb distribution
 
-Este proyecto es una **galería copy-paste**: cada orbe vive en `src/registry/orbe/<orb>/` y es la
-fuente de verdad. Hay dos vías para que un usuario se lleve un orbe a su proyecto.
+This project is a **copy-paste gallery**: each orb lives in `src/registry/orbe/<orb>/` and is the
+source of truth. There are two ways for a user to take an orb into their project.
 
 ## 1. Copy code
 
-Cada tarjeta de la galería expone **"Ver código"** con tabs por archivo (`*.tsx`,
-`*.module.css`, variante Tailwind) y un botón **"Copiar código"** que copia el archivo al
-portapapeles. El usuario pega los archivos, añade las utilidades compartidas de
-`src/registry/lib/` (`orb-state.ts`, `use-orb-level.ts`, `use-audio-level.ts`) e instala las
-dependencias que indique la tarjeta.
+Each gallery card exposes **"View code"** with a tab per file (`*.tsx`,
+`*.module.css`, Tailwind variant) and a **"Copy code"** button that copies the file to the
+clipboard. The user pastes the files, adds the shared utilities from
+`src/registry/lib/` (`orb-state.ts`, `use-orb-level.ts`, `use-audio-level.ts`) and installs the
+dependencies listed on the card.
 
-## 2. Copy prompt para IA
+## 2. Copy AI prompt
 
-Botón **"Copiar prompt para IA"** por orbe. Copia un prompt autocontenido (utilidades
-compartidas + archivos del orbe + contrato de props/estados) optimizado para pegar en
-Cursor / Copilot / Claude Code y que el asistente recree el orbe adaptándolo al proyecto.
-El prompt se genera en `src/registry/prompt.ts`.
+A **"Copy AI prompt"** button per orb. It copies a self-contained prompt (shared utilities
++ orb files + props/state contract) optimized to paste into
+Cursor / Copilot / Claude Code so the assistant recreates the orb and adapts it to the project.
+The prompt is generated in `src/registry/prompt.ts`.
 
-## Contrato común (para customización)
+## Shared contract (for customization)
 
 Props: `state`, `size`, `speed`, `colorFrom`, `colorTo`, `levelRef`, `label`, `className`.
-CSS vars públicas: `--orb-size`, `--orb-speed`, `--orb-color-from`, `--orb-color-to`,
+Public CSS vars: `--orb-size`, `--orb-speed`, `--orb-color-from`, `--orb-color-to`,
 `--orb-level`.
 
-- Orbes CSS-driven (`pulse-orb`, `glass-orb`): variante Tailwind (`*-tw.tsx`) y CSS Module.
-- Orbes logic-driven (`gooey`, `plasma`, `nebula`): JS/SVG/GLSL con `className` passthrough,
-  una sola implementación.
+- CSS-driven orbs (`pulse-orb`, `glass-orb`): Tailwind variant (`*-tw.tsx`) and CSS Module.
+- Logic-driven orbs (`gooey`, `plasma`, `nebula`): JS/SVG/GLSL with `className` passthrough,
+  a single implementation.

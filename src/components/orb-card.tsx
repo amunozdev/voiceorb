@@ -97,7 +97,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-xs text-muted">
         <label className="flex flex-col gap-1">
-          <span>Velocidad · {speed.toFixed(2)}×</span>
+          <span>Speed · {speed.toFixed(2)}×</span>
           <input
             type="range"
             min={0.25}
@@ -109,7 +109,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span>Tamaño · {size}px</span>
+          <span>Size · {size}px</span>
           <input
             type="range"
             min={96}
@@ -139,10 +139,10 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             mic ? 'border-accent bg-accent/15 text-accent' : 'border-border text-muted hover:text-foreground',
           )}
         >
-          {mic ? '● Micrófono activo' : 'Usar micrófono'}
+          {mic ? '● Mic on' : 'Use microphone'}
         </button>
         {mic && !reactive && (
-          <span className="text-[11px] text-muted">Cambia a listening/speaking para reaccionar a la voz</span>
+          <span className="text-[11px] text-muted">Switch to listening/speaking to react to the voice</span>
         )}
       </div>
 
@@ -151,13 +151,13 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
           <p className="font-mono text-[11px] text-muted">npm i {orb.dependencies.join(' ')}</p>
         )}
         <div className="flex flex-wrap gap-2">
-          <CopyButton value={orb.aiPrompt} label="Copiar prompt para IA" />
+          <CopyButton value={orb.aiPrompt} label="Copy AI prompt" />
           <button
             type="button"
             onClick={() => setShowCode((v) => !v)}
             className="rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
           >
-            {showCode ? 'Ocultar código' : 'Ver código'}
+            {showCode ? 'Hide code' : 'View code'}
           </button>
         </div>
         {showCode && <CodeBlock files={orb.files} />}

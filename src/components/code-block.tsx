@@ -24,7 +24,7 @@ export const CodeBlock = ({ files }: CodeBlockProps) => (
     {files.map((file) => (
       <Tabs.Content key={file.label} value={file.label} className="relative">
         <div className="absolute right-2 top-2 z-10">
-          <CopyButton value={file.code} label="Copiar código" />
+          <CopyButton value={file.code} label="Copy code" />
         </div>
         <pre className="max-h-80 overflow-auto p-4 text-xs leading-relaxed">
           <code className="font-mono text-[#c9d1e9]">{file.code}</code>

@@ -28,8 +28,8 @@ export const orbs: OrbMeta[] = [
   {
     id: 'pulse-orb',
     name: 'Pulse Orb',
-    tagline: 'Núcleo con anillos expansivos y arco de carga. Minimalista y SSR-safe.',
-    tech: 'CSS puro',
+    tagline: 'Core with expanding rings and a loading arc. Minimal and SSR-safe.',
+    tech: 'Pure CSS',
     dependencies: [],
     defaultColorFrom: '#818cf8',
     defaultColorTo: '#22d3ee',
@@ -43,8 +43,8 @@ export const orbs: OrbMeta[] = [
   {
     id: 'glass-orb',
     name: 'Glass Orb',
-    tagline: 'Glassmorphism iridiscente con aura cónica giratoria y reflejo especular.',
-    tech: 'CSS puro',
+    tagline: 'Iridescent glassmorphism with a spinning conic aura and specular highlight.',
+    tech: 'Pure CSS',
     dependencies: [],
     defaultColorFrom: '#a78bfa',
     defaultColorTo: '#38bdf8',
@@ -58,7 +58,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'gooey-orb',
     name: 'Gooey Orb',
-    tagline: 'Blob líquido cuyos bordes "hierven" con ruido SVG y desplazamiento.',
+    tagline: 'Liquid blob whose edges “boil” with SVG noise and displacement.',
     tech: 'SVG filters',
     dependencies: [],
     defaultColorFrom: '#f472b6',
@@ -69,7 +69,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'plasma-orb',
     name: 'Plasma Orb',
-    tagline: 'Mesh gradient de shader sobre canvas, sin Three.js. Distorsión orgánica.',
+    tagline: 'Shader mesh gradient on canvas, no Three.js. Organic distortion.',
     tech: 'Shader (canvas)',
     dependencies: ['@paper-design/shaders-react'],
     defaultColorFrom: '#7c3aed',
@@ -80,7 +80,7 @@ export const orbs: OrbMeta[] = [
   {
     id: 'nebula-orb',
     name: 'Nebula Orb',
-    tagline: 'Esfera 3D con displacement de simplex noise y fresnel. El "voice mode".',
+    tagline: '3D sphere with simplex-noise displacement and fresnel. The “voice mode”.',
     tech: 'WebGL (R3F + GLSL)',
     dependencies: ['three', '@react-three/fiber'],
     defaultColorFrom: '#8b5cf6',

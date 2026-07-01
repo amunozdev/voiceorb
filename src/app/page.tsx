@@ -41,20 +41,20 @@ const Page = async () => {
           Open source · copy-paste
         </p>
         <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-          Orbes animados para AI Assistants
+          Animated orbs for AI Assistants
         </h1>
         <p className="mt-4 text-pretty text-base text-muted">
-          Una galería de orbes con estados compartidos —{' '}
-          <span className="text-foreground">idle · connecting · listening · thinking · speaking</span> — listos para
-          copiar. Alterna estados, prueba la reactividad al micrófono y customiza color, velocidad y tamaño.
+          A gallery of orbs with shared states —{' '}
+          <span className="text-foreground">idle · connecting · listening · thinking · speaking</span> — ready to
+          copy. Toggle states, try the mic reactivity and customize color, speed and size.
         </p>
       </header>
 
       <Gallery orbs={data} />
 
       <footer className="mt-16 border-t border-border pt-6 text-sm text-muted">
-        ¿Cómo llevarte un orbe? Cada tarjeta trae el código completo (<span className="font-mono text-foreground">Ver código</span>{' '}
-        + Copiar) y un <span className="font-mono text-foreground">prompt para IA</span>. Más detalles en{' '}
+        How do you take an orb with you? Each card ships the full code (<span className="font-mono text-foreground">View code</span>{' '}
+        + Copy) and an <span className="font-mono text-foreground">AI prompt</span>. More details in{' '}
         <span className="font-mono text-foreground">docs/distribution.md</span>.
       </footer>
     </main>
