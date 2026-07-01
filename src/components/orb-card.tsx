@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { HexColorPicker, HexColorInput } from 'react-colorful';
+import { useState } from 'react';
 import clsx from 'clsx';
 import { ORB_STATES, type OrbState } from '@/registry/lib/orb-state';
 import { useAudioLevel } from '@/registry/lib/use-audio-level';
@@ -9,6 +8,7 @@ import type { FileWithCode } from '@/registry/prompt';
 import { OrbPreview } from './orb-preview';
 import { CodeBlock } from './code-block';
 import { CopyButton } from './copy-button';
+import { ColorField } from './color-field';
 
 export interface OrbCardData {
   id: string;
@@ -33,50 +33,6 @@ const STATE_LABEL: Record<OrbState, string> = {
   disabled: 'disabled',
 };
 
-interface ColorFieldProps {
-  label: string;
-  color: string;
-  onChange: (color: string) => void;
-}
-
-const ColorField = ({ label, color, onChange }: ColorFieldProps) => {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const handlePointerDown = (event: PointerEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false);
-    };
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [open]);
-
-  return (
-    <div ref={ref} className="relative flex items-center gap-2">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={`${label} color`}
-        className="h-7 w-9 rounded border border-border"
-        style={{ backgroundColor: color }}
-      />
-      <span>{label}</span>
-      {open && (
-        <div className="absolute bottom-full left-0 z-10 mb-2 flex w-44 flex-col gap-2 rounded-lg border border-border bg-panel p-2 shadow-lg">
-          <HexColorPicker color={color} onChange={onChange} />
-          <HexColorInput
-            color={color}
-            onChange={onChange}
-            prefixed
-            className="w-full rounded border border-border bg-transparent px-2 py-1 text-center font-mono text-xs text-foreground uppercase"
-          />
-        </div>
-      )}
-    </div>
-  );
-};
-
 export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
   const [state, setState] = useState<OrbState>('idle');
   const [mic, setMic] = useState(false);
@@ -85,6 +41,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
   const [colorFrom, setColorFrom] = useState(orb.defaultColorFrom);
   const [colorTo, setColorTo] = useState(orb.defaultColorTo);
   const [showCode, setShowCode] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
   const levelRef = useAudioLevel(mic);
 
   const reactive = state === 'listening' || state === 'speaking';
@@ -176,13 +133,20 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             className="accent-accent"
           />
         </label>
-        <ColorField label="From" color={colorFrom} onChange={setColorFrom} />
-        <ColorField label="To" color={colorTo} onChange={setColorTo} />
+        <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
+        <ColorField label="To" value={colorTo} onChange={setColorTo} />
       </div>
 
       <footer className="flex flex-col gap-3 border-t border-border pt-4">
         <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={orb.aiPrompt} label="Copy AI prompt" />
+          <button
+            type="button"
+            onClick={() => setShowPrompt((v) => !v)}
+            className="rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
+          >
+            {showPrompt ? 'Hide prompt' : 'View prompt'}
+          </button>
           <button
             type="button"
             onClick={() => setShowCode((v) => !v)}
@@ -194,6 +158,16 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             <p className="ml-auto truncate font-mono text-[11px] text-muted">npm i {orb.dependencies.join(' ')}</p>
           )}
         </div>
+        {showPrompt && (
+          <div className="relative rounded-lg border border-border bg-[#080a12]">
+            <div className="absolute top-2 right-2 z-10">
+              <CopyButton value={orb.aiPrompt} label="Copy" />
+            </div>
+            <pre className="max-h-80 overflow-auto whitespace-pre-wrap p-4 font-mono text-xs leading-relaxed text-muted">
+              {orb.aiPrompt}
+            </pre>
+          </div>
+        )}
         {showCode && <CodeBlock files={orb.files} />}
       </footer>
     </article>
