@@ -53,7 +53,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
   };
 
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-border bg-panel/60 p-5">
+    <article className="flex flex-col gap-5 rounded-2xl border border-border bg-panel/60 p-5">
       <header className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">{orb.name}</h2>
@@ -64,7 +64,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
         </span>
       </header>
 
-      <div className="grid min-h-56 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,#11131f,#06070d)]">
+      <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,#11131f,#06070d)]">
         <OrbPreview
           id={orb.id}
           state={state}
@@ -77,26 +77,37 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
         />
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         {ORB_STATES.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => setState(s)}
             className={clsx(
-              'rounded-md border px-2.5 py-1 text-xs transition-colors',
+              'rounded-md px-2.5 py-1 text-xs transition-colors',
               state === s
-                ? 'border-accent bg-accent/15 text-accent-foreground'
-                : 'border-border text-muted hover:text-foreground',
+                ? 'bg-accent/15 text-accent-foreground'
+                : 'text-muted hover:text-foreground',
             )}
           >
             {STATE_LABEL[s]}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={toggleMic}
+          title="React to your microphone in listening/speaking states"
+          className={clsx(
+            'ml-auto rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+            mic ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
+          )}
+        >
+          {mic ? '● Mic on' : 'Mic off'}
+        </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-xs text-muted">
-        <label className="flex flex-col gap-1">
+      <div className="grid grid-cols-2 items-center gap-x-5 gap-y-4 text-xs text-muted">
+        <label className="flex flex-col gap-1.5">
           <span>Speed · {speed.toFixed(2)}×</span>
           <input
             type="range"
@@ -108,7 +119,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             className="accent-accent"
           />
         </label>
-        <label className="flex flex-col gap-1">
+        <label className="flex flex-col gap-1.5">
           <span>Size · {size}px</span>
           <input
             type="range"
@@ -122,35 +133,16 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
         </label>
         <label className="flex items-center gap-2">
           <input type="color" value={colorFrom} onChange={(e) => setColorFrom(e.target.value)} className="h-7 w-9 rounded border border-border bg-transparent" />
-          <span>colorFrom</span>
+          <span>From</span>
         </label>
         <label className="flex items-center gap-2">
           <input type="color" value={colorTo} onChange={(e) => setColorTo(e.target.value)} className="h-7 w-9 rounded border border-border bg-transparent" />
-          <span>colorTo</span>
+          <span>To</span>
         </label>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={toggleMic}
-          className={clsx(
-            'rounded-md border px-3 py-1.5 text-xs font-medium transition-colors',
-            mic ? 'border-accent bg-accent/15 text-accent-foreground' : 'border-border text-muted hover:text-foreground',
-          )}
-        >
-          {mic ? '● Mic on' : 'Use microphone'}
-        </button>
-        {mic && !reactive && (
-          <span className="text-[11px] text-muted">Switch to listening/speaking to react to the voice</span>
-        )}
-      </div>
-
       <footer className="flex flex-col gap-3 border-t border-border pt-4">
-        {orb.dependencies.length > 0 && (
-          <p className="font-mono text-[11px] text-muted">npm i {orb.dependencies.join(' ')}</p>
-        )}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={orb.aiPrompt} label="Copy AI prompt" />
           <button
             type="button"
@@ -159,6 +151,9 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
           >
             {showCode ? 'Hide code' : 'View code'}
           </button>
+          {orb.dependencies.length > 0 && (
+            <p className="ml-auto truncate font-mono text-[11px] text-muted">npm i {orb.dependencies.join(' ')}</p>
+          )}
         </div>
         {showCode && <CodeBlock files={orb.files} />}
       </footer>
