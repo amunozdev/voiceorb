@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { HexColorPicker, HexColorInput } from 'react-colorful';
 import clsx from 'clsx';
 import { ORB_STATES, type OrbState } from '@/registry/lib/orb-state';
 import { useAudioLevel } from '@/registry/lib/use-audio-level';
@@ -30,6 +31,50 @@ const STATE_LABEL: Record<OrbState, string> = {
   speaking: 'speaking',
   error: 'error',
   disabled: 'disabled',
+};
+
+interface ColorFieldProps {
+  label: string;
+  color: string;
+  onChange: (color: string) => void;
+}
+
+const ColorField = ({ label, color, onChange }: ColorFieldProps) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label={`${label} color`}
+        className="h-7 w-9 rounded border border-border"
+        style={{ backgroundColor: color }}
+      />
+      <span>{label}</span>
+      {open && (
+        <div className="absolute bottom-full left-0 z-10 mb-2 flex w-44 flex-col gap-2 rounded-lg border border-border bg-panel p-2 shadow-lg">
+          <HexColorPicker color={color} onChange={onChange} />
+          <HexColorInput
+            color={color}
+            onChange={onChange}
+            prefixed
+            className="w-full rounded border border-border bg-transparent px-2 py-1 text-center font-mono text-xs text-foreground uppercase"
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
@@ -131,14 +176,8 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             className="accent-accent"
           />
         </label>
-        <label className="flex items-center gap-2">
-          <input type="color" value={colorFrom} onChange={(e) => setColorFrom(e.target.value)} className="h-7 w-9 rounded border border-border bg-transparent" />
-          <span>From</span>
-        </label>
-        <label className="flex items-center gap-2">
-          <input type="color" value={colorTo} onChange={(e) => setColorTo(e.target.value)} className="h-7 w-9 rounded border border-border bg-transparent" />
-          <span>To</span>
-        </label>
+        <ColorField label="From" color={colorFrom} onChange={setColorFrom} />
+        <ColorField label="To" color={colorTo} onChange={setColorTo} />
       </div>
 
       <footer className="flex flex-col gap-3 border-t border-border pt-4">
