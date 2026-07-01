@@ -21,8 +21,11 @@ export const GooeyOrb = ({
   const blobRef = useRef<SVGCircleElement>(null);
   const stateRef = useRef(state);
   const speedRef = useRef(speed);
-  stateRef.current = state;
-  speedRef.current = speed;
+
+  useEffect(() => {
+    stateRef.current = state;
+    speedRef.current = speed;
+  });
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
