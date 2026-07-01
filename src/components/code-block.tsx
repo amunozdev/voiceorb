@@ -15,7 +15,7 @@ export const CodeBlock = ({ files }: CodeBlockProps) => (
         <Tabs.Trigger
           key={file.label}
           value={file.label}
-          className="rounded-md px-2.5 py-1 text-xs text-muted transition-colors hover:text-foreground data-[state=active]:bg-[#080a12] data-[state=active]:text-accent"
+          className="rounded-md px-2.5 py-1 text-xs text-muted transition-colors hover:text-foreground data-[state=active]:bg-[#080a12] data-[state=active]:text-accent-foreground"
         >
           {file.label}
         </Tabs.Trigger>

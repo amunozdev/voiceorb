@@ -86,7 +86,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
             className={clsx(
               'rounded-md border px-2.5 py-1 text-xs transition-colors',
               state === s
-                ? 'border-accent bg-accent/15 text-accent'
+                ? 'border-accent bg-accent/15 text-accent-foreground'
                 : 'border-border text-muted hover:text-foreground',
             )}
           >
@@ -136,7 +136,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
           onClick={toggleMic}
           className={clsx(
             'rounded-md border px-3 py-1.5 text-xs font-medium transition-colors',
-            mic ? 'border-accent bg-accent/15 text-accent' : 'border-border text-muted hover:text-foreground',
+            mic ? 'border-accent bg-accent/15 text-accent-foreground' : 'border-border text-muted hover:text-foreground',
           )}
         >
           {mic ? '● Mic on' : 'Use microphone'}
@@ -155,7 +155,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
           <button
             type="button"
             onClick={() => setShowCode((v) => !v)}
-            className="rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            className="rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
           >
             {showCode ? 'Hide code' : 'View code'}
           </button>

@@ -27,7 +27,7 @@ export const CopyButton = ({ value, label = 'Copy', className }: CopyButtonProps
       type="button"
       onClick={copy}
       className={clsx(
-        'rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent',
+        'rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground',
         className,
       )}
     >

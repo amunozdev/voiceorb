@@ -3,6 +3,7 @@ import path from 'path';
 import { orbs, SHARED_FILES } from '@/registry/registry';
 import { buildAiPrompt, type FileWithCode } from '@/registry/prompt';
 import { Gallery } from '@/components/gallery';
+import { ThemeToggle } from '@/components/theme-toggle';
 import type { OrbCardData } from '@/components/orb-card';
 
 const read = async (file: { label: string; path: string; lang: string }): Promise<FileWithCode> => ({
@@ -37,9 +38,12 @@ const Page = async () => {
   return (
     <main className="mx-auto max-w-5xl px-5 py-16">
       <header className="mb-12 max-w-2xl">
-        <p className="mb-3 inline-block rounded-full border border-border px-3 py-1 text-xs text-muted">
-          Open source · copy-paste
-        </p>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <p className="inline-block rounded-full border border-border px-3 py-1 text-xs text-muted">
+            Open source · copy-paste
+          </p>
+          <ThemeToggle />
+        </div>
         <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
           Animated orbs for AI Assistants
         </h1>
