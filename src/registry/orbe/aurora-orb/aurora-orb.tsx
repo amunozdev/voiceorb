@@ -27,11 +27,14 @@ export const AuroraOrb = ({
       className={[styles.orb, className].filter(Boolean).join(' ')}
       style={orbVars({ size, speed, colorFrom, colorTo })}
     >
-      <span className={`${styles.veil} ${styles.veil1}`} />
-      <span className={`${styles.veil} ${styles.veil2}`} />
-      <span className={`${styles.veil} ${styles.veil3}`} />
-      <span className={styles.sheen} />
-      <span className={styles.rim} />
+      <span className={styles.halo} />
+      <span className={styles.sky}>
+        <span className={styles.stars} />
+        <span className={`${styles.veil} ${styles.veilBack}`} />
+        <span className={`${styles.veil} ${styles.veilMid}`} />
+        <span className={`${styles.veil} ${styles.veilFront}`} />
+        <span className={styles.film} />
+      </span>
     </div>
   );
 };
