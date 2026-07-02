@@ -4,109 +4,350 @@
   --orb-color-from: #22d3ee;
   --orb-color-to: #a855f7;
   --orb-level: 0;
+  --orb-tempo: 1;
+  --sky-hi: #16223c;
+  --sky-top: #0d1526;
+  --sky-mid: #0a111f;
+  --sky-low: #04070e;
+  --aurora-hi: #eafff6;
+  --aurora-green: var(--orb-color-from);
+  --aurora-cyan: var(--orb-color-from);
+  --aurora-pink: var(--orb-color-to);
+  --aurora-glow: var(--orb-color-from);
   position: relative;
-  display: grid;
-  place-items: center;
   width: var(--orb-size);
   height: var(--orb-size);
   border-radius: 50%;
+  box-shadow:
+    0 22px 44px -20px rgb(8 12 26 / 0.5),
+    0 6px 18px -8px rgb(10 16 32 / 0.32);
+}
+
+.halo {
+  position: absolute;
+  inset: -24%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    transparent 58%,
+    var(--aurora-glow) 71%,
+    transparent 92%
+  );
+  opacity: calc(0.16 + 0.34 * var(--orb-level));
+  transform: scale(calc(1 + 0.04 * var(--orb-level)));
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(circle at 50% 60%, #0b1020, #05070f 75%);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  background-image:
+    radial-gradient(1px 1px at 21px 84px, rgb(190 214 248 / 0.5) 40%, transparent 100%),
+    radial-gradient(0.8px 0.8px at 111px 31px, rgb(214 232 255 / 0.42) 40%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 67px 119px, rgb(226 238 255 / 0.36) 40%, transparent 100%),
+    radial-gradient(125% 90% at 50% -12%, var(--sky-hi) 0%, var(--sky-top) 46%, transparent 74%),
+    linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 56%, var(--sky-low) 100%);
+  background-size:
+    127px 127px,
+    149px 149px,
+    173px 173px,
+    100% 100%,
+    100% 100%;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.3px 1.3px at 13px 21px, rgb(237 246 255 / 0.95) 40%, transparent 100%),
+    radial-gradient(0.9px 0.9px at 61px 49px, rgb(201 221 248 / 0.85) 40%, transparent 100%),
+    radial-gradient(1.6px 1.6px at 37px 83px, rgb(255 255 255 / 0.92) 40%, transparent 100%),
+    radial-gradient(1px 1px at 92px 11px, rgb(208 228 255 / 0.75) 40%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 108px 68px, rgb(228 240 255 / 0.85) 40%, transparent 100%);
+  background-size:
+    83px 83px,
+    97px 97px,
+    118px 118px,
+    139px 139px,
+    151px 151px;
+  animation: aurora-twinkle calc(7.3s / var(--orb-speed)) ease-in-out infinite;
 }
 
 .veil {
   position: absolute;
-  inset: -30%;
-  border-radius: 45%;
+  inset: -16% -24%;
+  transform-origin: 50% 12%;
   mix-blend-mode: screen;
-  opacity: calc(0.45 + 0.4 * var(--orb-level));
-  filter: blur(calc(12px + 10px * var(--orb-level)));
-  transform-origin: 50% 50%;
+  will-change: transform;
 }
 
-.veil1 {
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    var(--orb-color-from),
-    transparent 55%
+.veilBack {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--aurora-green) 0px,
+    transparent 64px,
+    var(--aurora-cyan) 118px,
+    transparent 162px,
+    var(--aurora-green) 210px
   );
-  animation: orb-swirl calc(9s / var(--orb-speed)) linear infinite;
+  filter: blur(20px);
+  opacity: calc(0.4 + 0.3 * var(--orb-level));
+  -webkit-mask-image: linear-gradient(to bottom, black 26%, transparent 82%);
+  mask-image: linear-gradient(to bottom, black 26%, transparent 82%);
+  animation:
+    aurora-march-a calc(37s * var(--orb-tempo) / var(--orb-speed)) linear infinite,
+    aurora-sway-a calc(17.9s * var(--orb-tempo) / var(--orb-speed)) ease-in-out -7.3s infinite;
 }
 
-.veil2 {
-  background: conic-gradient(
-    from 140deg,
-    transparent,
-    var(--orb-color-to),
-    transparent 50%
+.veilMid {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    var(--aurora-green) 16px,
+    var(--aurora-hi) 24px,
+    var(--aurora-green) 31px,
+    transparent 52px,
+    transparent 70px,
+    var(--aurora-pink) 86px,
+    transparent 101px,
+    var(--aurora-cyan) 114px,
+    transparent 130px
   );
-  animation: orb-swirl calc(12s / var(--orb-speed)) linear infinite reverse;
+  filter: blur(14px);
+  opacity: calc(0.5 + 0.32 * var(--orb-level));
+  -webkit-mask-image: linear-gradient(to bottom, black 18%, transparent 76%);
+  mask-image: linear-gradient(to bottom, black 18%, transparent 76%);
+  animation:
+    aurora-march-b calc(19.1s * var(--orb-tempo) / var(--orb-speed)) linear infinite,
+    aurora-sway-b calc(13.3s * var(--orb-tempo) / var(--orb-speed)) ease-in-out -4.1s infinite;
 }
 
-.veil3 {
-  background: radial-gradient(
-    circle at 40% 35%,
-    color-mix(in oklab, var(--orb-color-from), #fff 20%),
-    transparent 55%
+.veilFront {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 13px,
+    var(--aurora-hi) 19px,
+    var(--aurora-green) 25px,
+    transparent 34px,
+    transparent 46px,
+    var(--aurora-cyan) 52px,
+    transparent 59px,
+    transparent 67px,
+    var(--aurora-pink) 72px,
+    transparent 84px
   );
-  animation: orb-drift calc(7s / var(--orb-speed)) ease-in-out infinite;
+  filter: blur(8px);
+  opacity: calc(0.08 + 0.92 * var(--orb-level));
+  -webkit-mask-image: linear-gradient(to bottom, black 10%, black 34%, transparent 66%);
+  mask-image: linear-gradient(to bottom, black 10%, black 34%, transparent 66%);
+  animation:
+    aurora-march-c calc(11.3s * var(--orb-tempo) / var(--orb-speed)) linear infinite,
+    aurora-sway-c calc(9.7s * var(--orb-tempo) / var(--orb-speed)) ease-in-out -2.9s infinite;
 }
 
-.sheen {
+.film {
   position: absolute;
-  width: 80%;
-  height: 80%;
+  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 30%, rgba(255, 255, 255, 0.28), transparent 45%);
-  transform: scale(calc(1 + 0.06 * var(--orb-level)));
-  transition: transform 0.12s linear;
+  background-image:
+    linear-gradient(to top, rgb(3 6 13 / 0.8) 0%, rgb(4 8 16 / 0.3) 10%, transparent 30%),
+    radial-gradient(closest-side, transparent 70%, rgb(3 7 15 / 0.42) 94%, rgb(2 5 12 / 0.7) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch' seed='7'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+  box-shadow: inset 0 0 0 1px rgb(154 196 235 / 0.07);
 }
 
-.rim {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 20px color-mix(in oklab, var(--orb-color-from), transparent 60%),
-    0 0 calc(14px + 30px * var(--orb-level)) color-mix(in oklab, var(--orb-color-to), transparent 55%);
+.orb[data-state='listening'] {
+  --orb-tempo: 0.55;
+}
+
+.orb[data-state='speaking'] {
+  --orb-tempo: 0.8;
+}
+
+.orb[data-state='thinking'] {
+  --orb-tempo: 1.6;
+  --aurora-green: var(--orb-color-to);
+  --aurora-glow: var(--orb-color-to);
+}
+
+.orb[data-state='connecting'] .veilFront {
+  animation:
+    aurora-march-c calc(11.3s * var(--orb-tempo) / var(--orb-speed)) linear infinite,
+    aurora-sway-c calc(9.7s * var(--orb-tempo) / var(--orb-speed)) ease-in-out -2.9s infinite,
+    aurora-pulse calc(2.3s / var(--orb-speed)) ease-in-out infinite;
 }
 
 .orb[data-state='error'] {
-  --orb-color-from: #fb7185;
-  --orb-color-to: #f43f5e;
+  --orb-tempo: 1.9;
+  --sky-hi: #2b1322;
+  --sky-top: #1d0e1a;
+  --sky-mid: #150913;
+  --sky-low: #08040a;
+  --aurora-hi: #ffe4e6;
+  --aurora-green: #fb7185;
+  --aurora-cyan: #f43f5e;
+  --aurora-pink: #fda4af;
+  --aurora-glow: #f43f5e;
 }
 
 .orb[data-state='disabled'] {
   filter: grayscale(0.85);
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
+.orb[data-state='disabled'] .stars,
 .orb[data-state='disabled'] .veil {
-  animation: none;
+  animation-play-state: paused;
 }
 
-@keyframes orb-swirl {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orb-drift {
+@keyframes aurora-twinkle {
   0%,
   100% {
-    transform: translate(-8%, 6%) scale(1);
+    opacity: 0.95;
   }
-  50% {
-    transform: translate(10%, -8%) scale(1.15);
+  23% {
+    opacity: 0.62;
+  }
+  47% {
+    opacity: 0.88;
+  }
+  71% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes aurora-march-a {
+  to {
+    background-position-x: -210px;
+  }
+}
+
+@keyframes aurora-march-b {
+  to {
+    background-position-x: 130px;
+  }
+}
+
+@keyframes aurora-march-c {
+  to {
+    background-position-x: -84px;
+  }
+}
+
+@keyframes aurora-sway-a {
+  0%,
+  100% {
+    transform: translate3d(-1.6%, -0.4%, 0) skewX(-6deg) rotate(-2deg) scaleY(1.03);
+  }
+  23% {
+    transform: translate3d(1.2%, 0.7%, 0) skewX(-7.5deg) rotate(1.2deg) scaleY(0.98);
+  }
+  47% {
+    transform: translate3d(2.6%, -0.8%, 0) skewX(-5deg) rotate(2.6deg) scaleY(1.07);
+  }
+  71% {
+    transform: translate3d(-2.4%, 0.9%, 0) skewX(-8deg) rotate(-1.4deg) scaleY(0.96);
+  }
+}
+
+@keyframes aurora-sway-b {
+  0%,
+  100% {
+    transform: translate3d(1.8%, 0.5%, 0) skewX(-8deg) rotate(2.2deg) scaleY(1);
+  }
+  23% {
+    transform: translate3d(-1.4%, -0.7%, 0) skewX(-9.5deg) rotate(-1.6deg) scaleY(1.06);
+  }
+  47% {
+    transform: translate3d(-2.8%, 0.6%, 0) skewX(-7deg) rotate(-3deg) scaleY(0.95);
+  }
+  71% {
+    transform: translate3d(2.2%, -0.5%, 0) skewX(-10deg) rotate(1.1deg) scaleY(1.04);
+  }
+}
+
+@keyframes aurora-sway-c {
+  0%,
+  100% {
+    transform: translate3d(-0.8%, 0.3%, 0) skewX(-9deg) rotate(-1.2deg) scaleY(1.02);
+  }
+  23% {
+    transform: translate3d(1.4%, -0.4%, 0) skewX(-8deg) rotate(0.9deg) scaleY(1.08);
+  }
+  47% {
+    transform: translate3d(2%, 0.5%, 0) skewX(-10deg) rotate(1.6deg) scaleY(0.97);
+  }
+  71% {
+    transform: translate3d(-1.8%, -0.3%, 0) skewX(-8.5deg) rotate(-0.8deg) scaleY(1.05);
+  }
+}
+
+@keyframes aurora-pulse {
+  0%,
+  100% {
+    opacity: 0.06;
+  }
+  55% {
+    opacity: 0.5;
+  }
+}
+
+@supports (color: color-mix(in oklab, red, red)) {
+  .orb {
+    --aurora-hi: color-mix(in oklab, var(--orb-color-from), #ecfdf5 62%);
+    --aurora-green: color-mix(in oklab, var(--orb-color-from), #34d399 55%);
+    --aurora-cyan: color-mix(in oklab, var(--orb-color-from), var(--orb-color-to) 38%);
+    --aurora-pink: color-mix(in oklab, var(--orb-color-to), #f472b6 42%);
+    --aurora-glow: color-mix(in oklab, var(--aurora-green), var(--aurora-cyan) 40%);
+  }
+
+  .orb[data-state='thinking'] {
+    --aurora-green: color-mix(in oklab, var(--orb-color-to), var(--orb-color-from) 32%);
+    --aurora-pink: color-mix(in oklab, var(--orb-color-to), #f472b6 45%);
+    --aurora-glow: color-mix(in oklab, var(--orb-color-to), var(--orb-color-from) 25%);
+  }
+}
+
+@supports (mix-blend-mode: plus-lighter) {
+  .veil {
+    mix-blend-mode: plus-lighter;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .veil {
+  .stars,
+  .veil,
+  .orb[data-state='connecting'] .veilFront {
     animation: none;
+  }
+
+  .stars {
+    opacity: 0.85;
+  }
+
+  .veilBack {
+    transform: skewX(-6deg) rotate(-2.4deg) scaleY(1.04);
+    background-position-x: -46px;
+    opacity: 0.58;
+  }
+
+  .veilMid {
+    transform: skewX(-8deg) rotate(1.8deg) scaleY(1.03);
+    background-position-x: -104px;
+    opacity: 0.6;
+  }
+
+  .veilFront {
+    transform: skewX(-9deg) rotate(-1.2deg);
+    background-position-x: -22px;
+    opacity: 0.42;
+  }
+
+  .halo {
+    opacity: 0.3;
+    transform: none;
   }
 }
