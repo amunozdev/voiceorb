@@ -62,7 +62,7 @@ const jsonLd = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f8fc",
+  themeColor: "#06070d",
 };
 
 export default function RootLayout({
@@ -83,7 +83,7 @@ export default function RootLayout({
         />
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
         >
