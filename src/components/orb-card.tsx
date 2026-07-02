@@ -25,6 +25,7 @@ import { SPEED_PRESETS, sizePresetsForOrb } from './control-presets';
 import { InstallBlock } from './install-block';
 import { OpenInStackblitz } from './open-in-stackblitz';
 import { PlayIcon, PauseIcon, MicIcon, MicOffIcon, SoundIcon, SoundOffIcon } from './orb-icons';
+import { Select } from './select';
 import { useDemoCycle } from './use-demo-cycle';
 
 export interface OrbCardData {
@@ -295,69 +296,71 @@ ${usageFile.code}\`\`\``,
         </div>
       </div>
 
-      <div className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2.5 text-xs">
-        <span className="text-muted">State</span>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <div
-            role="group"
-            aria-label="Conversation states"
-            className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
-          >
-            {ORB_STATES.map((s) => stateButton(s, state, selectState))}
-          </div>
-          <div
-            role="group"
-            aria-label="Special states"
-            className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
-          >
-            {SPECIAL_STATES.map((s) => stateButton(s, state, selectState))}
+      <div className="flex flex-col gap-4 text-xs">
+        <div className="flex flex-col gap-1.5">
+          <span className="text-muted">State</span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <div
+              role="group"
+              aria-label="Conversation states"
+              className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
+            >
+              {ORB_STATES.map((s) => stateButton(s, state, selectState))}
+            </div>
+            <div
+              role="group"
+              aria-label="Special states"
+              className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
+            >
+              {SPECIAL_STATES.map((s) => stateButton(s, state, selectState))}
+            </div>
           </div>
         </div>
-        <span className="text-muted">Speed</span>
-        <SegmentedControl
-          label="Speed"
-          options={SPEED_PRESETS}
-          value={speed}
-          onChange={setSpeed}
-          format={(v) => `${v}×`}
-        />
-        <span className="text-muted">Size</span>
-        <SegmentedControl
-          label="Size"
-          options={sizePresets}
-          value={size}
-          onChange={setSize}
-          format={(v) => `${v}px`}
-        />
-        <span className="text-muted">Color</span>
-        <div className="flex flex-wrap items-center gap-2">
-          <ColorPresetSwatches
-            presets={presets}
-            colorFrom={colorFrom}
-            colorTo={colorTo}
-            onSelect={applyPreset}
+        <div className="flex flex-col gap-1.5">
+          <span className="text-muted">Speed</span>
+          <SegmentedControl
+            label="Speed"
+            options={SPEED_PRESETS}
+            value={speed}
+            onChange={setSpeed}
+            format={(v) => `${v}×`}
           />
-          <span aria-hidden="true" className="h-4 w-px bg-border" />
-          <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
-          <ColorField label="To" value={colorTo} onChange={setColorTo} />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-muted">Size</span>
+          <SegmentedControl
+            label="Size"
+            options={sizePresets}
+            value={size}
+            onChange={setSize}
+            format={(v) => `${v}px`}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="text-muted">Color</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <ColorPresetSwatches
+              presets={presets}
+              colorFrom={colorFrom}
+              colorTo={colorTo}
+              onSelect={applyPreset}
+            />
+            <span aria-hidden="true" className="h-4 w-px bg-border" />
+            <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
+            <ColorField label="To" value={colorTo} onChange={setColorTo} />
+          </div>
         </div>
       </div>
 
       <footer className="flex flex-col gap-2.5 border-t border-border pt-4">
         <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={aiPrompt} label="Copy AI prompt" variant="solid" />
-          <select
+          <Select
             value={provider}
-            onChange={(e) => setProvider(e.target.value as PromptProvider)}
-            aria-label="AI prompt provider"
-            className="rounded-md border border-border bg-panel px-2 py-1.5 text-xs font-medium text-foreground"
-          >
-            {PROVIDERS.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+            onValueChange={(v) => setProvider(v as PromptProvider)}
+            options={PROVIDERS}
+            ariaLabel="AI prompt provider"
+          />
           <button
             type="button"
             onClick={() => setShowPrompt((v) => !v)}

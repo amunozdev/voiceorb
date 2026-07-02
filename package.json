@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@paper-design/shaders-react": "0.0.76",
+    "@radix-ui/react-select": "^2.3.2",
     "@radix-ui/react-tabs": "^1.1.16",
     "@react-three/fiber": "^9.6.1",
     "@stackblitz/sdk": "^1.11.0",
