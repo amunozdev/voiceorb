@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { ORB_STATES, type OrbState } from '@/registry/lib/orb-state';
 import { useAudioLevel } from '@/registry/lib/use-audio-level';
-import type { FileWithCode } from '@/registry/prompt';
+import { buildAiPrompt, type FileWithCode } from '@/registry/prompt';
 import { OrbPreview } from './orb-preview';
 import { CodeBlock } from './code-block';
 import { CopyButton } from './copy-button';
@@ -20,7 +20,6 @@ export interface OrbCardData {
   defaultColorTo: string;
   defaultSize: number;
   files: FileWithCode[];
-  aiPrompt: string;
 }
 
 const STATE_LABEL: Record<OrbState, string> = {
@@ -33,7 +32,7 @@ const STATE_LABEL: Record<OrbState, string> = {
   disabled: 'disabled',
 };
 
-export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
+export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCode[] }) => {
   const [state, setState] = useState<OrbState>('idle');
   const [mic, setMic] = useState(false);
   const [speed, setSpeed] = useState(1);
@@ -43,6 +42,11 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
   const [showCode, setShowCode] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const { levelRef } = useAudioLevel(mic);
+
+  const aiPrompt = useMemo(
+    () => buildAiPrompt(orb.name, orb.dependencies, orb.files, shared),
+    [orb.name, orb.dependencies, orb.files, shared],
+  );
 
   const reactive = state === 'listening' || state === 'speaking';
 
@@ -139,7 +143,7 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
 
       <footer className="flex flex-col gap-3 border-t border-border pt-4">
         <div className="flex flex-wrap items-center gap-2">
-          <CopyButton value={orb.aiPrompt} label="Copy AI prompt" />
+          <CopyButton value={aiPrompt} label="Copy AI prompt" />
           <button
             type="button"
             onClick={() => setShowPrompt((v) => !v)}
@@ -161,10 +165,10 @@ export const OrbCard = ({ orb }: { orb: OrbCardData }) => {
         {showPrompt && (
           <div className="relative rounded-lg border border-border bg-[#080a12]">
             <div className="absolute top-2 right-2 z-10">
-              <CopyButton value={orb.aiPrompt} label="Copy" />
+              <CopyButton value={aiPrompt} label="Copy" />
             </div>
             <pre className="max-h-80 overflow-auto whitespace-pre-wrap p-4 font-mono text-xs leading-relaxed text-muted">
-              {orb.aiPrompt}
+              {aiPrompt}
             </pre>
           </div>
         )}
