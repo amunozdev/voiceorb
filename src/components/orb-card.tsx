@@ -18,6 +18,8 @@ import { OrbPreview } from './orb-preview';
 import { CodeBlock } from './code-block';
 import { CopyButton } from './copy-button';
 import { ColorField } from './color-field';
+import { ColorPresetSwatches } from './color-preset-swatches';
+import { presetsForOrb } from './color-presets';
 import { InstallBlock } from './install-block';
 import { OpenInStackblitz } from './open-in-stackblitz';
 import { useDemoCycle } from './use-demo-cycle';
@@ -182,6 +184,12 @@ ${usageFile.code}\`\`\``,
   };
 
   const costHint = COST_HINT[orb.tech];
+  const presets = useMemo(() => presetsForOrb(orb.id), [orb.id]);
+
+  const applyPreset = (from: string, to: string) => {
+    setColorFrom(from);
+    setColorTo(to);
+  };
 
   return (
     <article
@@ -328,6 +336,12 @@ ${usageFile.code}\`\`\``,
             className="accent-accent"
           />
         </label>
+        <ColorPresetSwatches
+          presets={presets}
+          colorFrom={colorFrom}
+          colorTo={colorTo}
+          onSelect={applyPreset}
+        />
         <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
         <ColorField label="To" value={colorTo} onChange={setColorTo} />
       </div>
