@@ -5,11 +5,20 @@ import clsx from 'clsx';
 import { ORB_STATES, type OrbState } from '@/registry/lib/orb-state';
 import { OrbStatus } from '@/registry/lib/orb-status';
 import { useAudioLevel } from '@/registry/lib/use-audio-level';
-import { buildAiPrompt, type FileWithCode } from '@/registry/prompt';
+import { useOrbCues } from '@/registry/lib/use-orb-cues';
+import {
+  buildAiPrompt,
+  buildUsageSnippet,
+  type FileWithCode,
+  type PromptProvider,
+} from '@/registry/prompt';
 import { OrbPreview } from './orb-preview';
 import { CodeBlock } from './code-block';
 import { CopyButton } from './copy-button';
 import { ColorField } from './color-field';
+import { InstallBlock } from './install-block';
+import { OpenInStackblitz } from './open-in-stackblitz';
+import { useDemoCycle } from './use-demo-cycle';
 
 export interface OrbCardData {
   id: string;
@@ -45,6 +54,14 @@ const STATE_LABEL: Record<OrbState, string> = {
   disabled: 'disabled',
 };
 
+const PROVIDERS: { value: PromptProvider; label: string }[] = [
+  { value: 'generic', label: 'Generic' },
+  { value: 'vapi', label: 'Vapi' },
+  { value: 'elevenlabs', label: 'ElevenLabs' },
+  { value: 'livekit', label: 'LiveKit' },
+  { value: 'openai-realtime', label: 'OpenAI Realtime' },
+];
+
 const stateButton = (s: OrbState, state: OrbState, setState: (next: OrbState) => void) => (
   <button
     key={s}
@@ -69,25 +86,57 @@ export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCod
   const [colorTo, setColorTo] = useState(orb.defaultColorTo);
   const [showCode, setShowCode] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [cues, setCues] = useState(false);
+  const [provider, setProvider] = useState<PromptProvider>('generic');
   const { levelRef, error: micError } = useAudioLevel(mic);
   const [seenMicError, setSeenMicError] = useState<typeof micError>(null);
+  const demo = useDemoCycle(setState);
+
+  useOrbCues(state, { enabled: cues });
 
   if (micError !== seenMicError) {
     setSeenMicError(micError);
     if (micError) setMic(false);
   }
 
+  const component = orb.name.replace(/\s+/g, '');
+
+  const usageFile = useMemo<FileWithCode>(
+    () => ({
+      label: 'Usage',
+      path: 'usage.tsx',
+      lang: 'tsx',
+      code: buildUsageSnippet(component, { state, size, speed, colorFrom, colorTo }),
+    }),
+    [component, state, size, speed, colorFrom, colorTo],
+  );
+
+  const codeFiles = useMemo(() => [usageFile, ...orb.files], [usageFile, orb.files]);
+
   const aiPrompt = useMemo(
-    () => buildAiPrompt(orb.name, orb.dependencies, orb.files, shared),
-    [orb.name, orb.dependencies, orb.files, shared],
+    () =>
+      `${buildAiPrompt(orb.name, orb.dependencies, orb.files, shared, provider)}
+
+Requested configuration (current playground values, render the orb with exactly these props):
+\`\`\`tsx
+${usageFile.code}\`\`\``,
+    [orb.name, orb.dependencies, orb.files, shared, provider, usageFile.code],
   );
 
   const reactive = state === 'listening' || state === 'speaking';
 
+  const selectState = (next: OrbState) => {
+    demo.stop();
+    setState(next);
+  };
+
   const toggleMic = () => {
     setMic((prev) => {
       const next = !prev;
-      if (next && (state === 'idle' || state === 'connecting')) setState('listening');
+      if (next) {
+        demo.stop();
+        if (state === 'idle' || state === 'connecting') setState('listening');
+      }
       return next;
     });
   };
@@ -119,10 +168,34 @@ export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCod
 
       <div className="flex flex-wrap items-center gap-1.5">
         <div role="group" aria-label="Orb state" className="flex flex-wrap items-center gap-1.5">
-          {ORB_STATES.map((s) => stateButton(s, state, setState))}
+          {ORB_STATES.map((s) => stateButton(s, state, selectState))}
           <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-border" />
-          {SPECIAL_STATES.map((s) => stateButton(s, state, setState))}
+          {SPECIAL_STATES.map((s) => stateButton(s, state, selectState))}
         </div>
+        <button
+          type="button"
+          onClick={demo.toggle}
+          aria-pressed={demo.running}
+          title="Simulate a voice conversation: cycles idle, connecting, listening, thinking and speaking. Click any state or the mic to interrupt."
+          className={clsx(
+            'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+            demo.running ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
+          )}
+        >
+          {demo.running ? '■ Demo' : '▶ Demo'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setCues((prev) => !prev)}
+          aria-pressed={cues}
+          title="Play subtle sound cues (and haptics on supported devices) on state changes"
+          className={clsx(
+            'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+            cues ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
+          )}
+        >
+          {cues ? '● Cues on' : 'Cues off'}
+        </button>
         <OrbStatus state={state} className="ml-auto text-[11px] text-muted" />
         <button
           type="button"
@@ -179,6 +252,20 @@ export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCod
       <footer className="flex flex-col gap-3 border-t border-border pt-4">
         <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={aiPrompt} label="Copy AI prompt" />
+          <label className="flex items-center gap-1.5 text-xs text-muted">
+            for
+            <select
+              value={provider}
+              onChange={(e) => setProvider(e.target.value as PromptProvider)}
+              className="rounded-md border border-border bg-panel px-2 py-1.5 text-xs font-medium text-foreground"
+            >
+              {PROVIDERS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             type="button"
             onClick={() => setShowPrompt((v) => !v)}
@@ -193,10 +280,16 @@ export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCod
           >
             {showCode ? 'Hide code' : 'View code'}
           </button>
-          {orb.dependencies.length > 0 && (
-            <p className="ml-auto truncate font-mono text-[11px] text-muted">npm i {orb.dependencies.join(' ')}</p>
-          )}
+          <OpenInStackblitz
+            id={orb.id}
+            name={orb.name}
+            dependencies={orb.dependencies}
+            files={orb.files}
+            shared={shared}
+            config={{ state, size, speed, colorFrom, colorTo }}
+          />
         </div>
+        {orb.dependencies.length > 0 && <InstallBlock dependencies={orb.dependencies} />}
         {showPrompt && (
           <div className="relative rounded-lg border border-border bg-[#080a12]">
             <div className="absolute top-2 right-2 z-10">
@@ -207,7 +300,7 @@ export const OrbCard = ({ orb, shared }: { orb: OrbCardData; shared: FileWithCod
             </pre>
           </div>
         )}
-        {showCode && <CodeBlock files={orb.files} />}
+        {showCode && <CodeBlock files={codeFiles} />}
       </footer>
     </article>
   );
