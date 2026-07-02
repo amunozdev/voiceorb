@@ -22,7 +22,7 @@ const XIcon = () => (
 
 export const Footer = () => (
   <footer className="mt-auto border-t border-border">
-    <div className="mx-auto flex max-w-5xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-10">
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-3">
           <a
