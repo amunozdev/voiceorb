@@ -347,11 +347,11 @@ ${usageFile.code}\`\`\``,
         </div>
         {orb.dependencies.length > 0 && <InstallBlock dependencies={orb.dependencies} />}
         {showPrompt && (
-          <div className="relative rounded-lg border border-border bg-[#080a12]">
+          <div className="relative rounded-lg border border-border bg-code">
             <div className="absolute top-2 right-2 z-10">
               <CopyButton value={aiPrompt} label="Copy" />
             </div>
-            <pre className="max-h-80 overflow-auto whitespace-pre-wrap p-4 font-mono text-xs leading-relaxed text-muted">
+            <pre className="max-h-80 overflow-auto whitespace-pre-wrap p-4 font-mono text-xs leading-relaxed text-code-muted">
               {aiPrompt}
             </pre>
           </div>
