@@ -7,11 +7,17 @@ interface CopyButtonProps {
   value: string;
   label?: string;
   className?: string;
+  variant?: 'outline' | 'solid';
 }
 
 type CopyStatus = 'idle' | 'copied' | 'failed';
 
-export const CopyButton = ({ value, label = 'Copy', className }: CopyButtonProps) => {
+export const CopyButton = ({
+  value,
+  label = 'Copy',
+  className,
+  variant = 'outline',
+}: CopyButtonProps) => {
   const [status, setStatus] = useState<CopyStatus>('idle');
 
   const copy = async () => {
@@ -29,7 +35,10 @@ export const CopyButton = ({ value, label = 'Copy', className }: CopyButtonProps
       type="button"
       onClick={copy}
       className={clsx(
-        'rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground',
+        'rounded-md px-3 py-1.5 text-xs font-medium transition-colors',
+        variant === 'solid'
+          ? 'border border-accent bg-accent text-white hover:bg-accent/85'
+          : 'border border-border bg-panel text-foreground hover:border-accent hover:text-accent-foreground',
         className,
       )}
     >

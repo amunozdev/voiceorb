@@ -41,7 +41,7 @@ export const ColorField = ({ label, value, onChange }: ColorFieldProps) => {
         aria-label={label}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="h-7 w-9 shrink-0 rounded border border-border"
+        className="h-6 w-8 shrink-0 rounded border border-border"
         style={{ backgroundColor: value }}
       />
       <span>{label}</span>

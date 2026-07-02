@@ -96,13 +96,21 @@ const stateButton = (s: OrbState, state: OrbState, setState: (next: OrbState) =>
     onClick={() => setState(s)}
     aria-pressed={state === s}
     className={clsx(
-      'rounded-md px-2.5 py-1 text-xs transition-colors',
+      'rounded px-2 py-1 text-xs transition-colors',
       state === s ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
     )}
   >
     {STATE_LABEL[s]}
   </button>
 );
+
+const transportChip = (active: boolean) =>
+  clsx(
+    'rounded-md border px-2.5 py-1 text-xs font-medium transition-colors',
+    active
+      ? 'border-accent bg-accent/15 text-accent-foreground'
+      : 'border-border bg-panel text-muted hover:text-foreground',
+  );
 
 export const OrbCard = ({
   orb,
@@ -214,74 +222,80 @@ ${usageFile.code}\`\`\``,
         <p className="text-sm text-muted">{orb.tagline}</p>
       </header>
 
-      <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,var(--orb-stage-from),var(--orb-stage-to))]">
-        <OrbPreview
-          id={orb.id}
-          state={state}
-          size={size}
-          speed={speed}
-          colorFrom={colorFrom}
-          colorTo={colorTo}
-          levelRef={reactive ? levelRef : undefined}
-          label={orb.name}
-        />
-      </div>
-
-      <div className="flex flex-wrap items-center gap-1.5">
-        <div role="group" aria-label="Orb state" className="flex flex-wrap items-center gap-1.5">
-          {ORB_STATES.map((s) => stateButton(s, state, selectState))}
-          <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-border" />
-          {SPECIAL_STATES.map((s) => stateButton(s, state, selectState))}
+      <div className="flex flex-col gap-2.5">
+        <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,var(--orb-stage-from),var(--orb-stage-to))]">
+          <OrbPreview
+            id={orb.id}
+            state={state}
+            size={size}
+            speed={speed}
+            colorFrom={colorFrom}
+            colorTo={colorTo}
+            levelRef={reactive ? levelRef : undefined}
+            label={orb.name}
+          />
         </div>
-        <button
-          type="button"
-          onClick={demo.toggle}
-          aria-pressed={demo.running}
-          title="Simulate a voice conversation: cycles idle, connecting, listening, thinking and speaking. Click any state or the mic to interrupt."
-          className={clsx(
-            'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-            demo.running ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
-          )}
-        >
-          {demo.running ? '■ Demo' : '▶ Demo'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setCues((prev) => !prev)}
-          aria-pressed={cues}
-          title="Play subtle sound cues (and haptics on supported devices) on state changes"
-          className={clsx(
-            'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-            cues ? 'bg-accent/15 text-accent-foreground' : 'text-muted hover:text-foreground',
-          )}
-        >
-          {cues ? '● Cues on' : 'Cues off'}
-        </button>
-        <OrbStatus state={state} className="ml-auto text-[11px] text-muted" />
-        <button
-          type="button"
-          onClick={toggleMic}
-          aria-pressed={mic && !micError}
-          disabled={state === 'disabled'}
-          title={
-            micError
-              ? MIC_ERROR_TITLE[micError]
-              : 'React to your microphone in listening/speaking states'
-          }
-          className={clsx(
-            'rounded-md px-2.5 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50',
-            micError
-              ? 'border border-foreground/40 text-foreground'
-              : mic
-                ? 'bg-accent/15 text-accent-foreground'
-                : 'text-muted hover:text-foreground',
-          )}
-        >
-          {micError ? MIC_ERROR_LABEL[micError] : mic ? '● Mic on' : 'Mic off'}
-        </button>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={demo.toggle}
+            aria-pressed={demo.running}
+            title="Simulate a voice conversation: cycles idle, connecting, listening, thinking and speaking. Click any state or the mic to interrupt."
+            className={transportChip(demo.running)}
+          >
+            {demo.running ? '■ Demo' : '▶ Demo'}
+          </button>
+          <button
+            type="button"
+            onClick={toggleMic}
+            aria-pressed={mic && !micError}
+            disabled={state === 'disabled'}
+            title={
+              micError
+                ? MIC_ERROR_TITLE[micError]
+                : 'React to your microphone in listening/speaking states'
+            }
+            className={clsx(
+              'disabled:cursor-not-allowed disabled:opacity-50',
+              micError
+                ? 'rounded-md border border-foreground/40 bg-panel px-2.5 py-1 text-xs font-medium text-foreground transition-colors'
+                : transportChip(mic),
+            )}
+          >
+            {micError ? MIC_ERROR_LABEL[micError] : mic ? '● Mic on' : 'Mic off'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setCues((prev) => !prev)}
+            aria-pressed={cues}
+            title="Play subtle sound cues (and haptics on supported devices) on state changes"
+            className={transportChip(cues)}
+          >
+            {cues ? '● Cues on' : 'Cues off'}
+          </button>
+          <OrbStatus state={state} className="ml-auto text-[11px] text-muted" />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 items-center gap-x-5 gap-y-4 text-xs text-muted sm:grid-cols-2">
+      <div className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2.5 text-xs">
+        <span className="text-muted">State</span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <div
+            role="group"
+            aria-label="Conversation states"
+            className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
+          >
+            {ORB_STATES.map((s) => stateButton(s, state, selectState))}
+          </div>
+          <div
+            role="group"
+            aria-label="Special states"
+            className="flex w-fit flex-wrap items-center gap-0.5 rounded-md border border-border bg-panel p-0.5"
+          >
+            {SPECIAL_STATES.map((s) => stateButton(s, state, selectState))}
+          </div>
+        </div>
+        <span className="text-muted">Speed</span>
         <SegmentedControl
           label="Speed"
           options={SPEED_PRESETS}
@@ -289,6 +303,7 @@ ${usageFile.code}\`\`\``,
           onChange={setSpeed}
           format={(v) => `${v}×`}
         />
+        <span className="text-muted">Size</span>
         <SegmentedControl
           label="Size"
           options={sizePresets}
@@ -296,33 +311,35 @@ ${usageFile.code}\`\`\``,
           onChange={setSize}
           format={(v) => `${v}px`}
         />
-        <ColorPresetSwatches
-          presets={presets}
-          colorFrom={colorFrom}
-          colorTo={colorTo}
-          onSelect={applyPreset}
-        />
-        <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
-        <ColorField label="To" value={colorTo} onChange={setColorTo} />
+        <span className="text-muted">Color</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <ColorPresetSwatches
+            presets={presets}
+            colorFrom={colorFrom}
+            colorTo={colorTo}
+            onSelect={applyPreset}
+          />
+          <span aria-hidden="true" className="h-4 w-px bg-border" />
+          <ColorField label="From" value={colorFrom} onChange={setColorFrom} />
+          <ColorField label="To" value={colorTo} onChange={setColorTo} />
+        </div>
       </div>
 
-      <footer className="flex flex-col gap-3 border-t border-border pt-4">
+      <footer className="flex flex-col gap-2.5 border-t border-border pt-4">
         <div className="flex flex-wrap items-center gap-2">
-          <CopyButton value={aiPrompt} label="Copy AI prompt" />
-          <label className="flex items-center gap-1.5 text-xs text-muted">
-            for
-            <select
-              value={provider}
-              onChange={(e) => setProvider(e.target.value as PromptProvider)}
-              className="rounded-md border border-border bg-panel px-2 py-1.5 text-xs font-medium text-foreground"
-            >
-              {PROVIDERS.map((p) => (
-                <option key={p.value} value={p.value}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <CopyButton value={aiPrompt} label="Copy AI prompt" variant="solid" />
+          <select
+            value={provider}
+            onChange={(e) => setProvider(e.target.value as PromptProvider)}
+            aria-label="AI prompt provider"
+            className="rounded-md border border-border bg-panel px-2 py-1.5 text-xs font-medium text-foreground"
+          >
+            {PROVIDERS.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
           <button
             type="button"
             onClick={() => setShowPrompt((v) => !v)}
@@ -330,6 +347,8 @@ ${usageFile.code}\`\`\``,
           >
             {showPrompt ? 'Hide prompt' : 'View prompt'}
           </button>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setShowCode((v) => !v)}
