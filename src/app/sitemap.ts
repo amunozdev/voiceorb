@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { orbs } from '@/registry/registry';
 
-const BASE_URL = 'https://voiceorb.vercel.app';
+const BASE_URL = 'https://voiceorbs.vercel.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

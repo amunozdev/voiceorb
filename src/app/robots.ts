@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://voiceorb.vercel.app/sitemap.xml",
+    sitemap: "https://voiceorbs.vercel.app/sitemap.xml",
   };
 }

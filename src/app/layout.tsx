@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://voiceorb.vercel.app";
+const siteUrl = "https://voiceorbs.vercel.app";
 const siteName = "VoiceOrb";
 const siteTitle = "VoiceOrb | Animated orbs for AI assistants";
 const siteDescription =

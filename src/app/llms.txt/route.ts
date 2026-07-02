@@ -3,7 +3,7 @@ import { ORB_STATES } from '@/registry/lib/orb-state';
 
 export const dynamic = 'force-static';
 
-const SITE_URL = 'https://voiceorb.vercel.app';
+const SITE_URL = 'https://voiceorbs.vercel.app';
 const REPO_URL = 'https://github.com/amunozdev/voiceorb';
 
 export const GET = (): Response => {

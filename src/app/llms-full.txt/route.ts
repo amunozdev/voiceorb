@@ -5,7 +5,7 @@ import type { FileWithCode } from '@/registry/prompt';
 
 export const dynamic = 'force-static';
 
-const SITE_URL = 'https://voiceorb.vercel.app';
+const SITE_URL = 'https://voiceorbs.vercel.app';
 const REPO_URL = 'https://github.com/amunozdev/voiceorb';
 
 const fileBlock = (file: FileWithCode): string => {
