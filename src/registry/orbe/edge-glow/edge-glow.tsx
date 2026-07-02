@@ -1,9 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { orbVars, type OrbProps } from '../../lib/orb-state';
+import { ERROR_COLOR_FROM, ERROR_COLOR_TO, orbVars, type OrbProps } from '../../lib/orb-state';
 import { useOrbLevel } from '../../lib/use-orb-level';
+import styles from './edge-glow.module.css';
 
 export interface EdgeGlowProps extends OrbProps {
   children?: ReactNode;
@@ -18,60 +19,47 @@ export const EdgeGlow = ({
   levelRef,
   label = 'Edge Glow frame',
   className,
+  ref,
   children,
 }: EdgeGlowProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  useOrbLevel(ref, state, levelRef);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      innerRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
+  useOrbLevel(innerRef, state, levelRef);
   const hasChildren = children != null;
+  const isError = state === 'error';
 
   return (
     <div
-      ref={ref}
+      ref={mergedRef}
       role={hasChildren ? undefined : 'img'}
       aria-label={hasChildren ? undefined : label}
       data-state={state}
-      className={className}
+      className={[styles.frame, className].filter(Boolean).join(' ')}
       style={{
-        ...orbVars({ size, speed, colorFrom, colorTo }),
-        position: 'relative',
+        ...orbVars({
+          size,
+          speed,
+          colorFrom: isError ? ERROR_COLOR_FROM : colorFrom,
+          colorTo: isError ? ERROR_COLOR_TO : colorTo,
+        }),
         width: hasChildren ? '100%' : size,
         height: hasChildren ? '100%' : size,
-        borderRadius: 24,
-        opacity: state === 'disabled' ? 0.5 : 1,
-        filter: state === 'disabled' ? 'grayscale(0.85)' : undefined,
-        transition: 'opacity 0.3s ease, filter 0.3s ease',
       }}
     >
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          borderRadius: 'inherit',
-          background: `conic-gradient(from 0deg, ${colorFrom}, ${colorTo}, ${colorFrom})`,
-          filter: 'blur(10px)',
-          opacity: 'calc(0.45 + var(--orb-level, 0) * 0.55)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 4,
-          borderRadius: 20,
-          background: 'rgba(10, 12, 20, 0.9)',
-          display: 'grid',
-          placeItems: 'center',
-        }}
-      >
+      <span aria-hidden className={styles.aura} />
+      <span aria-hidden className={styles.band} />
+      <span aria-hidden className={styles.sweep} />
+      <span aria-hidden className={styles.chase} />
+      <div className={hasChildren ? styles.content : `${styles.content} ${styles.demo}`}>
         {children ?? (
-          <span
-            aria-hidden
-            style={{
-              fontSize: Math.max(12, size * 0.09),
-              color: colorTo,
-              opacity: 0.85,
-            }}
-          >
+          <span aria-hidden className={styles.demoLabel}>
             Your UI here
           </span>
         )}
