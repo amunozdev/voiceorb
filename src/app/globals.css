@@ -37,6 +37,7 @@
   --border: var(--gray-5);
   --accent: var(--indigo-7);
   --accent-foreground: var(--indigo-8);
+  --star: oklch(0.78 0.152 80);
   --orb-stage-from: var(--gray-3);
   --orb-stage-to: var(--gray-2);
   --code-bg: var(--gray-11);
@@ -56,6 +57,7 @@
   --border: var(--gray-8);
   --accent: var(--indigo-7);
   --accent-foreground: var(--indigo-5);
+  --star: oklch(0.84 0.156 84);
   --orb-stage-from: var(--gray-9);
   --orb-stage-to: var(--gray-12);
   --code-bg: var(--gray-11);
@@ -74,6 +76,7 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-star: var(--star);
   --color-code: var(--code-bg);
   --color-code-foreground: var(--code-fg);
   --color-code-tab: var(--code-tab-bg);
