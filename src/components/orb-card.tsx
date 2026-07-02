@@ -20,6 +20,8 @@ import { CopyButton } from './copy-button';
 import { ColorField } from './color-field';
 import { ColorPresetSwatches } from './color-preset-swatches';
 import { presetsForOrb } from './color-presets';
+import { SegmentedControl } from './segmented-control';
+import { SPEED_PRESETS, sizePresetsForOrb } from './control-presets';
 import { InstallBlock } from './install-block';
 import { OpenInStackblitz } from './open-in-stackblitz';
 import { useDemoCycle } from './use-demo-cycle';
@@ -185,6 +187,7 @@ ${usageFile.code}\`\`\``,
 
   const costHint = COST_HINT[orb.tech];
   const presets = useMemo(() => presetsForOrb(orb.id), [orb.id]);
+  const sizePresets = useMemo(() => sizePresetsForOrb(orb.defaultSize), [orb.defaultSize]);
 
   const applyPreset = (from: string, to: string) => {
     setColorFrom(from);
@@ -279,30 +282,20 @@ ${usageFile.code}\`\`\``,
       </div>
 
       <div className="grid grid-cols-1 items-center gap-x-5 gap-y-4 text-xs text-muted sm:grid-cols-2">
-        <label className="flex flex-col gap-1.5">
-          <span>Speed · {speed.toFixed(2)}×</span>
-          <input
-            type="range"
-            min={0.25}
-            max={3}
-            step={0.05}
-            value={speed}
-            onChange={(e) => setSpeed(Number(e.target.value))}
-            className="accent-accent"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span>Size · {size}px</span>
-          <input
-            type="range"
-            min={96}
-            max={240}
-            step={4}
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-            className="accent-accent"
-          />
-        </label>
+        <SegmentedControl
+          label="Speed"
+          options={SPEED_PRESETS}
+          value={speed}
+          onChange={setSpeed}
+          format={(v) => `${v}×`}
+        />
+        <SegmentedControl
+          label="Size"
+          options={sizePresets}
+          value={size}
+          onChange={setSize}
+          format={(v) => `${v}px`}
+        />
         <ColorPresetSwatches
           presets={presets}
           colorFrom={colorFrom}
