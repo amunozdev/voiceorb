@@ -1,8 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
-import { orbVars, type OrbProps } from '../../lib/orb-state';
-import { useOrbLevel } from '../../lib/use-orb-level';
+import { useEffect, useRef } from 'react';
+import { approach, orbVars, stateEnergy, type OrbProps } from '../../lib/orb-state';
 import styles from './halo-orb.module.css';
 
 export const HaloOrb = ({
@@ -16,7 +15,42 @@ export const HaloOrb = ({
   className,
 }: OrbProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  useOrbLevel(ref, state, levelRef);
+  const stateRef = useRef(state);
+  const liveRef = useRef(levelRef);
+
+  useEffect(() => {
+    stateRef.current = state;
+    liveRef.current = levelRef;
+  });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.style.setProperty('--orb-level', '0');
+      return;
+    }
+
+    let raf = 0;
+    let last: number | null = null;
+    let level = 0;
+
+    const frame = (now: number) => {
+      if (last === null) last = now;
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      const live = liveRef.current?.current;
+      const target =
+        typeof live === 'number' && live >= 0 ? live : stateEnergy(stateRef.current, now / 1000);
+      level = approach(level, target, 7.5, dt);
+      el.style.setProperty('--orb-level', level.toFixed(3));
+      raf = requestAnimationFrame(frame);
+    };
+
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   return (
     <div
