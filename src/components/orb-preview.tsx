@@ -6,6 +6,7 @@ import { GlassOrb } from '@/registry/orbe/glass-orb/glass-orb';
 import { GooeyOrb } from '@/registry/orbe/gooey-orb/gooey-orb';
 import { PlasmaOrb } from '@/registry/orbe/plasma-orb/plasma-orb';
 import { NebulaOrb } from '@/registry/orbe/nebula-orb/nebula-orb';
+import { GalaxyOrb } from '@/registry/orbe/galaxy-orb/galaxy-orb';
 import { PixelOrb } from '@/registry/orbe/pixel-orb/pixel-orb';
 import { ParticlesOrb } from '@/registry/orbe/particles-orb/particles-orb';
 import { EqualizerOrb } from '@/registry/orbe/equalizer-orb/equalizer-orb';
@@ -19,6 +20,7 @@ const MAP: Record<string, ComponentType<OrbProps>> = {
   'gooey-orb': GooeyOrb,
   'plasma-orb': PlasmaOrb,
   'nebula-orb': NebulaOrb,
+  'galaxy-orb': GalaxyOrb,
   'pixel-orb': PixelOrb,
   'particles-orb': ParticlesOrb,
   'equalizer-orb': EqualizerOrb,

@@ -144,6 +144,17 @@ export const orbs: OrbMeta[] = [
     files: [{ label: 'plasma-orb.tsx', path: 'src/registry/orbe/plasma-orb/plasma-orb.tsx', lang: 'tsx' }],
   },
   {
+    id: 'galaxy-orb',
+    name: 'Galaxy Orb',
+    tagline: 'A glassy bubble holding a drifting starfield and nebula, with a specular glare and an iridescent, chromatic rim.',
+    tech: 'Canvas',
+    dependencies: [],
+    defaultColorFrom: '#c084fc',
+    defaultColorTo: '#38bdf8',
+    defaultSize: 168,
+    files: [{ label: 'galaxy-orb.tsx', path: 'src/registry/orbe/galaxy-orb/galaxy-orb.tsx', lang: 'tsx' }],
+  },
+  {
     id: 'nebula-orb',
     name: 'Nebula Orb',
     tagline: '3D sphere with simplex-noise displacement and fresnel. The “voice mode”.',
