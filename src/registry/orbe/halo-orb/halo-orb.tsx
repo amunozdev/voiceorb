@@ -27,11 +27,14 @@ export const HaloOrb = ({
       className={[styles.orb, className].filter(Boolean).join(' ')}
       style={orbVars({ size, speed, colorFrom, colorTo })}
     >
-      <span className={styles.halo} />
-      <span className={`${styles.orbit} ${styles.orbit1}`} />
-      <span className={`${styles.orbit} ${styles.orbit2}`} />
+      <span className={styles.glow} />
+      <span className={`${styles.halo} ${styles.haloB}`} />
+      <span className={`${styles.halo} ${styles.haloA}`} />
       <span className={styles.disc} />
       <span className={styles.core} />
+      <span className={`${styles.orbit} ${styles.orbitA}`} />
+      <span className={`${styles.orbit} ${styles.orbitB}`} />
+      <span className={styles.sparks} />
     </div>
   );
 };
