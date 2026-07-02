@@ -68,7 +68,7 @@ const buildIndexHtml = (name: string): string => `<!doctype html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${name} - Orbe Assistants</title>
+    <title>${name} - VoiceOrb</title>
   </head>
   <body>
     <div id="root"></div>
@@ -120,7 +120,7 @@ const buildPackageJson = (id: string, dependencies: string[]): string => {
   for (const dep of dependencies) deps[dep] = DEP_VERSIONS[dep] ?? 'latest';
   return `${JSON.stringify(
     {
-      name: `orbe-${id}`,
+      name: `voiceorb-${id}`,
       private: true,
       type: 'module',
       scripts: { dev: 'vite', build: 'vite build' },
@@ -163,7 +163,7 @@ export const OpenInStackblitz = ({
     for (const file of [...shared, ...files]) projectFiles[file.path] = file.code;
     sdk.openProject(
       {
-        title: `${name} - Orbe Assistants`,
+        title: `${name} - VoiceOrb`,
         description: `${name} animated AI-assistant orb in a Vite + React sandbox`,
         template: 'node',
         files: projectFiles,

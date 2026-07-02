@@ -20,7 +20,7 @@ export const generateMetadata = async ({
   const { id } = await params;
   const orb = orbs.find((o) => o.id === id);
   if (!orb) return {};
-  const title = `${orb.name} | Orbe Assistants`;
+  const title = `${orb.name} | VoiceOrb`;
   return {
     title,
     description: orb.tagline,
@@ -29,7 +29,7 @@ export const generateMetadata = async ({
       title,
       description: orb.tagline,
       url: `/orbs/${orb.id}`,
-      siteName: 'Orbe Assistants',
+      siteName: 'VoiceOrb',
       type: 'website',
     },
     twitter: {

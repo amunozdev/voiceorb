@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Orbe Assistants, an open-source gallery of animated orbs for AI assistants";
+  "VoiceOrb, an open-source gallery of animated orbs for AI assistants";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -51,7 +51,7 @@ export default function Image() {
               letterSpacing: -2,
             }}
           >
-            Orbe Assistants
+            VoiceOrb
           </div>
           <div
             style={{

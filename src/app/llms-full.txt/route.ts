@@ -5,8 +5,8 @@ import type { FileWithCode } from '@/registry/prompt';
 
 export const dynamic = 'force-static';
 
-const SITE_URL = 'https://orbe-assistants.vercel.app';
-const REPO_URL = 'https://github.com/amunozdev/orbe-assistants';
+const SITE_URL = 'https://voiceorb.vercel.app';
+const REPO_URL = 'https://github.com/amunozdev/voiceorb';
 
 const fileBlock = (file: FileWithCode): string => {
   const code = file.code.endsWith('\n') ? file.code : `${file.code}\n`;
@@ -41,7 +41,7 @@ ${orbFiles[i].map(fileBlock).join('\n')}`;
     })
     .join('\n');
 
-  const body = `# Orbe Assistants (full source)
+  const body = `# VoiceOrb (full source)
 
 > Animated, audio-reactive orbs for AI voice assistants: ${orbs.length} copy-paste React components sharing one small props contract, distributed as source code and AI prompts instead of an npm package.
 

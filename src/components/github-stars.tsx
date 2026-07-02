@@ -1,5 +1,5 @@
-const REPO_URL = 'https://github.com/amunozdev/orbe-assistants';
-const API_URL = 'https://api.github.com/repos/amunozdev/orbe-assistants';
+const REPO_URL = 'https://github.com/amunozdev/voiceorb';
+const API_URL = 'https://api.github.com/repos/amunozdev/voiceorb';
 
 const StarIcon = () => (
   <svg
