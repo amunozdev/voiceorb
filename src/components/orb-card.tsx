@@ -54,6 +54,27 @@ const STATE_LABEL: Record<OrbState, string> = {
   disabled: 'disabled',
 };
 
+const COST_HINT: Record<string, { label?: string; note: string }> = {
+  'Pure CSS': {
+    label: 'compositor only',
+    note: 'Animates on the compositor thread; the cheapest option, safe on any mobile device.',
+  },
+  Canvas: {
+    note: 'Redraws a 2D canvas every frame; moderate CPU cost, fine on most phones.',
+  },
+  'SVG filters': {
+    note: 'SVG filter effects rasterize on the CPU; can be heavy on low-end mobile.',
+  },
+  'Shader (canvas)': {
+    label: 'gpu',
+    note: 'Fragment shader running on the GPU; smooth but battery-hungry on mobile.',
+  },
+  'WebGL (R3F + GLSL)': {
+    label: 'gpu',
+    note: 'Full WebGL scene on the GPU; the heaviest option, use sparingly on mobile.',
+  },
+};
+
 const PROVIDERS: { value: PromptProvider; label: string }[] = [
   { value: 'generic', label: 'Generic' },
   { value: 'vapi', label: 'Vapi' },
@@ -141,16 +162,51 @@ ${usageFile.code}\`\`\``,
     });
   };
 
+  const costHint = COST_HINT[orb.tech];
+
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border border-border bg-panel/60 p-5">
+    <article
+      id={orb.id}
+      className="flex scroll-mt-20 flex-col gap-5 rounded-2xl border border-border bg-panel/60 p-5"
+    >
       <header className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">{orb.name}</h2>
+          <h2 className="text-lg font-semibold">
+            {orb.name}
+            <a
+              href={`#${orb.id}`}
+              aria-label={`Link to ${orb.name}`}
+              className="ml-1.5 text-sm font-normal text-muted transition-colors hover:text-accent-foreground"
+            >
+              #
+            </a>
+          </h2>
           <p className="mt-1 text-sm text-muted">{orb.tagline}</p>
         </div>
-        <span className="shrink-0 rounded-full border border-border px-2.5 py-1 text-[11px] text-muted">
-          {orb.tech}
-        </span>
+        <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+          <span
+            title={costHint?.note}
+            className="rounded-full border border-border px-2.5 py-1 text-[11px] text-muted"
+          >
+            {orb.tech}
+          </span>
+          {costHint?.label && (
+            <span
+              title={costHint.note}
+              className="rounded-full border border-border px-2.5 py-1 text-[11px] text-muted"
+            >
+              {costHint.label}
+            </span>
+          )}
+          {orb.dependencies.length === 0 && (
+            <span
+              title="No external dependencies; copy the files and it just works."
+              className="rounded-full border border-border px-2.5 py-1 text-[11px] text-muted"
+            >
+              Zero deps
+            </span>
+          )}
+        </div>
       </header>
 
       <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,var(--orb-stage-from),var(--orb-stage-to))]">
