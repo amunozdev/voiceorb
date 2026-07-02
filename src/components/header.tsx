@@ -16,12 +16,6 @@ export const Header = () => (
         <span className="truncate">VoiceOrbs</span>
       </Link>
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-        <Link
-          href="/recipes"
-          className="rounded-md px-2 py-1 text-sm text-muted transition-colors hover:text-foreground"
-        >
-          Recipes
-        </Link>
         <GitHubStars />
         <ThemeToggle />
       </div>
