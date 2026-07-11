@@ -14,6 +14,7 @@ import { HaloOrb } from '@/registry/orbe/halo-orb/halo-orb';
 import { WaveformRing } from '@/registry/orbe/waveform-ring/waveform-ring';
 import { EdgeGlow } from '@/registry/orbe/edge-glow/edge-glow';
 import { IridescentFlow } from '@/registry/orbe/iridescent-flow/iridescent-flow';
+import { MinimalOrb } from '@/registry/orbe/minimal-orb/minimal-orb';
 import type { OrbProps } from '@/registry/lib/orb-state';
 
 const MAP: Record<string, ComponentType<OrbProps>> = {
@@ -28,6 +29,7 @@ const MAP: Record<string, ComponentType<OrbProps>> = {
   'waveform-ring': WaveformRing,
   'edge-glow': EdgeGlow,
   'iridescent-flow': IridescentFlow,
+  'minimal-orb': MinimalOrb,
 };
 
 const DEFERRED_MAP: Record<string, ComponentType<OrbProps>> = {

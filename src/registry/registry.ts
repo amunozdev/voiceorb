@@ -297,6 +297,21 @@ export const orbs: OrbMeta[] = [
     ],
   },
   {
+    id: 'minimal-orb',
+    name: 'Minimal Orb',
+    tagline: 'A single quiet disc: just breath and color. As minimal as it gets.',
+    tech: 'Pure CSS',
+    dependencies: [],
+    defaultColorFrom: '#818cf8',
+    defaultColorTo: '#a5b4fc',
+    defaultSize: 168,
+    files: [
+      { label: 'minimal-orb.tsx', path: 'src/registry/orbe/minimal-orb/minimal-orb.tsx', lang: 'tsx', variant: 'css-modules' },
+      { label: 'minimal-orb.module.css', path: 'src/registry/orbe/minimal-orb/minimal-orb.module.css', lang: 'css', variant: 'css-modules' },
+      { label: 'minimal-orb-tw.tsx (Tailwind)', path: 'src/registry/orbe/minimal-orb/minimal-orb-tw.tsx', lang: 'tsx', variant: 'tailwind' },
+    ],
+  },
+  {
     id: 'radiance-orb',
     name: 'Radiance Orb',
     tagline: 'Radial gradient shader whose focus and falloff breathe with your voice.',
