@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { GitHubStars } from '@/components/github-stars';
+import { GitHubLink } from '@/components/github-link';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 export const Header = () => (
@@ -16,7 +16,7 @@ export const Header = () => (
         <span className="truncate">VoiceOrbs</span>
       </Link>
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-        <GitHubStars />
+        <GitHubLink />
         <ThemeToggle />
       </div>
     </div>
