@@ -45,13 +45,16 @@ const shade = (hex: string, t: number) => mixHex(hex, '#000000', t);
 const tint = (hex: string, t: number) => mixHex(hex, '#ffffff', t);
 
 const brandPalette = (from: string, to: string): string[] => [
-  tint(from, 0.55),
+  shade(to, 0.78),
+  shade(to, 0.42),
+  to,
+  mixHex(to, from, 0.55),
   from,
-  mixHex(from, to, 0.55),
-  shade(to, 0.2),
+  tint(from, 0.55),
+  tint(from, 0.94),
 ];
 
-const brandBack = (to: string) => shade(to, 0.72);
+const brandBack = (to: string) => shade(to, 0.86);
 
 const ERROR_PALETTE = brandPalette(ERROR_COLOR_FROM, ERROR_COLOR_TO);
 const ERROR_BACK = brandBack(ERROR_COLOR_TO);
@@ -82,33 +85,33 @@ const shapeFor = (s: OrbState, energy: number): RadianceShape => {
   switch (s) {
     case 'listening':
       return {
-        radius: 0.6 + energy * 0.45,
-        focalDistance: 0.4 + energy * 0.5,
-        falloff: 0.42 - energy * 0.3,
-        distortion: energy * 0.18,
+        radius: 1 + energy * 0.08,
+        focalDistance: 0.22 + energy * 0.3,
+        falloff: 0.08 + energy * 0.5,
+        distortion: 0.05 + energy * 0.16,
       };
     case 'speaking':
       return {
-        radius: 0.65 + energy * 0.5,
-        focalDistance: 0.35 + energy * 0.55,
-        falloff: 0.4 - energy * 0.28,
-        distortion: energy * 0.2,
+        radius: 1.02 + energy * 0.1,
+        focalDistance: 0.26 + energy * 0.34,
+        falloff: 0.12 + energy * 0.55,
+        distortion: 0.07 + energy * 0.2,
       };
     case 'thinking':
-      return { radius: 0.62, focalDistance: 0.55, falloff: 0.3, distortion: 0.12 };
+      return { radius: 1, focalDistance: 0.48, falloff: 0.22, distortion: 0.14 };
     case 'connecting':
       return {
-        radius: 0.45 + energy * 0.35,
-        focalDistance: 0.3 + energy * 0.3,
-        falloff: 0.5 - energy * 0.15,
-        distortion: 0.05,
+        radius: 0.98,
+        focalDistance: 0.12 + energy * 0.2,
+        falloff: -0.12 + energy * 0.35,
+        distortion: 0.04,
       };
     case 'error':
-      return { radius: 0.85, focalDistance: 0.65, falloff: 0.15, distortion: 0.3 };
+      return { radius: 1.06, focalDistance: 0.5, falloff: 0.5, distortion: 0.34 };
     case 'disabled':
-      return { radius: 0.45, focalDistance: 0.2, falloff: 0.55, distortion: 0 };
+      return { radius: 0.96, focalDistance: 0.1, falloff: -0.3, distortion: 0 };
     default:
-      return { radius: 0.5, focalDistance: 0.3, falloff: 0.5, distortion: 0.04 };
+      return { radius: 1, focalDistance: 0.2, falloff: 0.16, distortion: 0.03 };
   }
 };
 
@@ -349,8 +352,8 @@ export const RadianceOrb = ({
   ].map(({ key, from: f, to: t, visible }) => ({
     key,
     visible,
-    base: `radial-gradient(circle at 42% 36%, ${tint(f, 0.5)}, ${f} 30%, ${mixHex(f, t, 0.55)} 62%, ${shade(t, 0.55)} 100%)`,
-    glow: `radial-gradient(circle at 40% 34%, ${tint(f, 0.65)}, transparent 42%), radial-gradient(circle at 64% 70%, ${tint(t, 0.25)}, transparent 58%)`,
+    base: `radial-gradient(circle at 47% 40%, ${tint(f, 0.94)}, ${tint(f, 0.55)} 16%, ${f} 36%, ${mixHex(t, f, 0.55)} 56%, ${t} 72%, ${shade(t, 0.42)} 88%, ${shade(t, 0.78)} 100%)`,
+    glow: `radial-gradient(circle at 47% 40%, ${tint(f, 0.9)}, ${tint(f, 0.4)} 22%, transparent 55%)`,
   }));
 
   return (
@@ -411,7 +414,7 @@ export const RadianceOrb = ({
             focalDistance={view.focalDistance}
             focalAngle={view.focalAngle}
             falloff={view.falloff}
-            mixing={0.9}
+            mixing={0.95}
             distortion={view.distortion}
             distortionShift={0.2}
             distortionFreq={9}
@@ -458,7 +461,7 @@ export const RadianceOrb = ({
             borderRadius: '50%',
             pointerEvents: 'none',
             backgroundImage:
-              'radial-gradient(circle at 34% 24%, rgba(255,255,255,0.5), transparent 16%), radial-gradient(circle at 33% 28%, rgba(255,255,255,0.24), transparent 46%), radial-gradient(circle at 68% 76%, rgba(10,14,24,0.4), transparent 60%)',
+              'radial-gradient(circle at 50% 50%, transparent 58%, rgba(6,3,16,0.3) 90%, rgba(6,3,16,0.55) 100%)',
           }}
         />
       </div>
