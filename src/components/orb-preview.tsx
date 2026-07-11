@@ -41,6 +41,21 @@ const DEFERRED_MAP: Record<string, ComponentType<OrbProps>> = {
   'nebula-orb': dynamic(() => import('@/registry/orbe/nebula-orb/nebula-orb').then((m) => m.NebulaOrb), {
     ssr: false,
   }),
+  'radiance-orb': dynamic(() => import('@/registry/orbe/radiance-orb/radiance-orb').then((m) => m.RadianceOrb), {
+    ssr: false,
+  }),
+  'dither-orb': dynamic(() => import('@/registry/orbe/dither-orb/dither-orb').then((m) => m.DitherOrb), {
+    ssr: false,
+  }),
+  'dot-orbit': dynamic(() => import('@/registry/orbe/dot-orbit/dot-orbit').then((m) => m.DotOrbit), {
+    ssr: false,
+  }),
+  'grain-orb': dynamic(() => import('@/registry/orbe/grain-orb/grain-orb').then((m) => m.GrainOrb), {
+    ssr: false,
+  }),
+  'mercury-orb': dynamic(() => import('@/registry/orbe/mercury-orb/mercury-orb').then((m) => m.MercuryOrb), {
+    ssr: false,
+  }),
 };
 
 const DeferredOrb = ({ orb: Orb, ...props }: OrbProps & { orb: ComponentType<OrbProps> }) => {
