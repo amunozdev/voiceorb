@@ -44,9 +44,14 @@ const mixHex = (a: string, b: string, t: number): string => {
 const shade = (hex: string, t: number) => mixHex(hex, '#000000', t);
 const tint = (hex: string, t: number) => mixHex(hex, '#ffffff', t);
 
+const withAlpha = (hex: string, alpha: number) =>
+  `${hex}${Math.round(alpha * 255)
+    .toString(16)
+    .padStart(2, '0')}`;
+
 const brandPalette = (from: string, to: string): string[] => [
-  shade(to, 0.78),
-  shade(to, 0.42),
+  shade(to, 0.28),
+  shade(to, 0.08),
   to,
   mixHex(to, from, 0.55),
   from,
@@ -54,10 +59,13 @@ const brandPalette = (from: string, to: string): string[] => [
   tint(from, 0.94),
 ];
 
-const brandBack = (to: string) => shade(to, 0.86);
+const BLOOM_ALPHA = [0, 0.45, 0.92, 1, 1, 1, 1];
+const TRANSPARENT = '#00000000';
+const BLOOM_SCALE = 1.5;
+const BLOOM_MASK =
+  'radial-gradient(circle closest-side, #000 50%, rgba(0,0,0,0.72) 68%, rgba(0,0,0,0.26) 85%, transparent 100%)';
 
 const ERROR_PALETTE = brandPalette(ERROR_COLOR_FROM, ERROR_COLOR_TO);
-const ERROR_BACK = brandBack(ERROR_COLOR_TO);
 
 const GL_ATTRIBUTES: WebGLContextAttributes = {
   antialias: true,
@@ -334,26 +342,23 @@ export const RadianceOrb = ({
         ? colorTo
         : mixHex(colorTo, ERROR_COLOR_TO, errorMix);
   const brandColors = brandPalette(colorFrom, colorTo);
-  const colors =
+  const baseColors =
     errorMix >= 1
       ? ERROR_PALETTE
       : errorMix <= 0
         ? brandColors
         : brandColors.map((stop, index) => mixHex(stop, ERROR_PALETTE[index], errorMix));
-  const back =
-    errorMix >= 1
-      ? ERROR_BACK
-      : errorMix <= 0
-        ? brandBack(colorTo)
-        : mixHex(brandBack(colorTo), ERROR_BACK, errorMix);
+  const colors = baseColors.map((stop, index) => withAlpha(stop, BLOOM_ALPHA[index]));
+  const bloom = Math.round(size * BLOOM_SCALE);
+  const pad = (bloom - size) / 2;
   const fallbackLayers = [
     { key: 'brand', from: colorFrom, to: colorTo, visible: state !== 'error' },
     { key: 'error', from: ERROR_COLOR_FROM, to: ERROR_COLOR_TO, visible: state === 'error' },
   ].map(({ key, from: f, to: t, visible }) => ({
     key,
     visible,
-    base: `radial-gradient(circle at 47% 40%, ${tint(f, 0.94)}, ${tint(f, 0.55)} 16%, ${f} 36%, ${mixHex(t, f, 0.55)} 56%, ${t} 72%, ${shade(t, 0.42)} 88%, ${shade(t, 0.78)} 100%)`,
-    glow: `radial-gradient(circle at 47% 40%, ${tint(f, 0.9)}, ${tint(f, 0.4)} 22%, transparent 55%)`,
+    base: `radial-gradient(circle at 50% 46%, ${tint(f, 0.94)}, ${tint(f, 0.55)} 12%, ${f} 26%, ${mixHex(t, f, 0.55)} 42%, ${t} 58%, ${withAlpha(t, 0.4)} 76%, ${withAlpha(shade(t, 0.28), 0)} 100%)`,
+    glow: `radial-gradient(circle at 50% 46%, ${tint(f, 0.9)}, ${withAlpha(tint(f, 0.4), 0.65)} 20%, transparent 52%)`,
   }));
 
   return (
@@ -369,7 +374,6 @@ export const RadianceOrb = ({
         width: size,
         height: size,
         position: 'relative',
-        borderRadius: '50%',
         opacity: state === 'disabled' ? 0.5 : 1,
         filter: state === 'disabled' ? 'grayscale(0.85)' : 'grayscale(0)',
         transform: showShader ? `scale(${(1 + view.energy * 0.06).toFixed(4)})` : undefined,
@@ -378,37 +382,34 @@ export const RadianceOrb = ({
       }}
     >
       <div
+        aria-hidden
         style={{
           position: 'absolute',
-          inset: 0,
-          borderRadius: '50%',
-          boxShadow: `0 ${-size * 0.06}px ${size * 0.3}px color-mix(in oklab, ${from} 55%, transparent), 0 ${size * 0.06}px ${size * 0.3}px color-mix(in oklab, ${to} 55%, transparent)`,
+          inset: -pad,
+          backgroundImage: `radial-gradient(circle, ${withAlpha(from, 0.5)}, ${withAlpha(to, 0.26)} 42%, ${withAlpha(to, 0)} 72%)`,
+          filter: `blur(${Math.round(size * 0.08)}px)`,
           opacity: showShader
-            ? Math.min(1, 0.35 + view.energy * 0.65)
-            : 'calc(0.35 + var(--orb-level, 0) * 0.6)',
+            ? Math.min(1, 0.25 + view.energy * 0.6)
+            : 'calc(0.25 + var(--orb-level, 0) * 0.6)',
           transform: showShader ? `scale(${(1 + view.energy * 0.08).toFixed(4)})` : undefined,
           scale: showShader ? undefined : 'calc(1 + var(--orb-level, 0) * 0.08)',
-          transition: showShader
-            ? 'opacity 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.35s ease'
-            : 'box-shadow 0.35s ease',
+          transition: showShader ? 'opacity 0.2s ease-out, transform 0.2s ease-out' : undefined,
         }}
       />
       <div
         ref={sphereRef}
         style={{
           position: 'absolute',
-          inset: 0,
-          borderRadius: '50%',
-          overflow: 'hidden',
-          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${from} 45%, transparent), 0 0 0 1px rgba(255,255,255,0.08)`,
-          transition: 'box-shadow 0.35s ease',
+          inset: -pad,
+          maskImage: BLOOM_MASK,
+          WebkitMaskImage: BLOOM_MASK,
         }}
       >
         {showShader ? (
           <StaticRadialGradient
-            width={size}
-            height={size}
-            colorBack={back}
+            width={bloom}
+            height={bloom}
+            colorBack={TRANSPARENT}
             colors={colors}
             radius={view.radius}
             focalDistance={view.focalDistance}
@@ -428,14 +429,13 @@ export const RadianceOrb = ({
             webGlContextAttributes={GL_ATTRIBUTES}
           />
         ) : (
-          <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: '50%' }}>
+          <div aria-hidden style={{ position: 'absolute', inset: 0 }}>
             {fallbackLayers.map((layer) => (
               <div
                 key={layer.key}
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  borderRadius: '50%',
                   backgroundImage: layer.base,
                   opacity: layer.visible ? 1 : 0,
                   transition: 'opacity 0.35s ease',
@@ -445,7 +445,6 @@ export const RadianceOrb = ({
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    borderRadius: '50%',
                     backgroundImage: layer.glow,
                     opacity: 'calc(0.25 + var(--orb-level, 0) * 0.75)',
                   }}
@@ -454,16 +453,6 @@ export const RadianceOrb = ({
             ))}
           </div>
         )}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '50%',
-            pointerEvents: 'none',
-            backgroundImage:
-              'radial-gradient(circle at 50% 50%, transparent 58%, rgba(6,3,16,0.3) 90%, rgba(6,3,16,0.55) 100%)',
-          }}
-        />
       </div>
     </div>
   );
