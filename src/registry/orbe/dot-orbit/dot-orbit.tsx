@@ -84,19 +84,19 @@ const speedFor = (s: OrbState) =>
 const motionFor = (s: OrbState, energy: number) => {
   switch (s) {
     case 'thinking':
-      return { dotSize: 0.3, spreading: Math.min(1, 0.55 + energy * 0.15) };
+      return { dotSize: 0.55, spreading: Math.min(0.95, 0.8 + energy * 0.15) };
     case 'listening':
     case 'speaking':
       return {
-        dotSize: Math.min(0.62, 0.32 + energy * 0.26),
-        spreading: Math.min(1, 0.34 + energy * 0.45),
+        dotSize: Math.min(0.98, 0.66 + energy * 0.34),
+        spreading: Math.min(0.95, 0.5 + energy * 0.45),
       };
     case 'error':
-      return { dotSize: 0.42, spreading: 0.72 };
+      return { dotSize: 0.75, spreading: 0.9 };
     case 'connecting':
-      return { dotSize: Math.min(0.5, 0.28 + energy * 0.3), spreading: 0.3 };
+      return { dotSize: Math.min(0.75, 0.55 + energy * 0.2), spreading: 0.45 };
     default:
-      return { dotSize: 0.3, spreading: 0.26 };
+      return { dotSize: 0.62, spreading: 0.5 };
   }
 };
 
@@ -354,10 +354,10 @@ export const DotOrbit = ({
             colors={colors}
             colorBack="#00000000"
             size={view.dotSize}
-            sizeRange={0.4}
+            sizeRange={0.3}
             spreading={view.spreading}
             stepsPerColor={2}
-            scale={0.16}
+            scale={0.35}
             speed={view.shaderSpeed}
             frame={BASE_FRAME}
             minPixelRatio={2}
