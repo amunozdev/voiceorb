@@ -45,11 +45,12 @@ const shade = (hex: string, t: number) => mixHex(hex, '#000000', t);
 const tint = (hex: string, t: number) => mixHex(hex, '#ffffff', t);
 
 const brandPalette = (from: string, to: string): string[] => [
+  tint(from, 0.35),
   from,
-  mixHex(from, to, 0.35),
-  mixHex(from, to, 0.65),
+  mixHex(from, to, 0.5),
   to,
-  tint(to, 0.4),
+  tint(to, 0.55),
+  '#ffffff',
 ];
 
 const ERROR_PALETTE = brandPalette(ERROR_COLOR_FROM, ERROR_COLOR_TO);
@@ -84,19 +85,19 @@ const speedFor = (s: OrbState) =>
 const motionFor = (s: OrbState, energy: number) => {
   switch (s) {
     case 'thinking':
-      return { dotSize: 0.55, spreading: Math.min(0.95, 0.8 + energy * 0.15) };
+      return { dotSize: 0.5, spreading: Math.min(1, 0.75 + energy * 0.25) };
     case 'listening':
     case 'speaking':
       return {
-        dotSize: Math.min(0.98, 0.66 + energy * 0.34),
-        spreading: Math.min(0.95, 0.5 + energy * 0.45),
+        dotSize: Math.min(1, 0.62 + energy * 0.38),
+        spreading: Math.min(1, 0.4 + energy * 0.6),
       };
     case 'error':
-      return { dotSize: 0.75, spreading: 0.9 };
+      return { dotSize: 0.85, spreading: 1 };
     case 'connecting':
-      return { dotSize: Math.min(0.75, 0.55 + energy * 0.2), spreading: 0.45 };
+      return { dotSize: Math.min(0.85, 0.62 + energy * 0.23), spreading: 0.45 };
     default:
-      return { dotSize: 0.62, spreading: 0.5 };
+      return { dotSize: 0.68, spreading: 0.35 };
   }
 };
 
@@ -286,16 +287,21 @@ export const DotOrbit = ({
       : errorMix <= 0
         ? brandColors
         : brandColors.map((stop, index) => mixHex(stop, ERROR_PALETTE[index], errorMix));
-  const core = `radial-gradient(circle at 50% 42%, ${shade(mixHex(from, to, 0.5), 0.55)}, ${shade(from, 0.78)} 62%, ${shade(to, 0.86)} 100%)`;
+  const coreFor = (f: string, t: string) =>
+    `radial-gradient(circle at 50% 44%, ${tint(mixHex(f, t, 0.5), 0.45)}, ${mixHex(f, t, 0.55)} 20%, ${shade(f, 0.5)} 52%, ${shade(t, 0.85)} 100%)`;
+  const core = coreFor(from, to);
+  const coreGlow = `radial-gradient(circle at 50% 44%, ${tint(to, 0.8)}, ${tint(mixHex(from, to, 0.5), 0.25)} 22%, transparent 46%)`;
+  const orbitMask =
+    'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.55), rgba(0,0,0,0.6) 16%, rgba(0,0,0,0.95) 32%, black 46%, black 76%, transparent 97%)';
   const fallbackLayers = [
     { key: 'brand', from: colorFrom, to: colorTo, visible: state !== 'error' },
     { key: 'error', from: ERROR_COLOR_FROM, to: ERROR_COLOR_TO, visible: state === 'error' },
   ].map(({ key, from: f, to: t, visible }) => ({
     key,
     visible,
-    base: `radial-gradient(circle at 50% 42%, ${shade(mixHex(f, t, 0.5), 0.5)}, ${shade(f, 0.75)} 60%, ${shade(t, 0.85)} 100%)`,
-    dots: `radial-gradient(circle, ${tint(f, 0.25)} 26%, transparent 30%), radial-gradient(circle, ${t} 22%, transparent 26%)`,
-    glow: `radial-gradient(circle at 34% 28%, ${tint(t, 0.4)}, transparent 55%), radial-gradient(circle at 66% 72%, ${tint(f, 0.2)}, transparent 62%)`,
+    base: coreFor(f, t),
+    dots: `radial-gradient(circle, #ffffff 24%, transparent 30%), radial-gradient(circle, ${tint(t, 0.35)} 26%, transparent 32%), radial-gradient(circle, ${shade(f, 0.35)} 30%, transparent 36%)`,
+    glow: `radial-gradient(circle at 50% 44%, ${tint(t, 0.6)}, transparent 55%)`,
   }));
 
   return (
@@ -347,22 +353,45 @@ export const DotOrbit = ({
           transition: 'box-shadow 0.35s ease',
         }}
       >
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '50%',
+            backgroundImage: coreGlow,
+            opacity: showShader
+              ? Math.min(1, 0.3 + view.energy * 0.7)
+              : 'calc(0.3 + var(--orb-level, 0) * 0.7)',
+            transition: 'opacity 0.2s ease-out',
+          }}
+        />
         {showShader ? (
-          <DotOrbitShader
-            width={size}
-            height={size}
-            colors={colors}
-            colorBack="#00000000"
-            size={view.dotSize}
-            sizeRange={0.3}
-            spreading={view.spreading}
-            stepsPerColor={2}
-            scale={0.35}
-            speed={view.shaderSpeed}
-            frame={BASE_FRAME}
-            minPixelRatio={2}
-            webGlContextAttributes={GL_ATTRIBUTES}
-          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: '-18%',
+              transform: `rotate(-18deg) scaleY(0.86) scale(${(1 + view.energy * 0.1).toFixed(4)})`,
+              maskImage: orbitMask,
+              WebkitMaskImage: orbitMask,
+            }}
+          >
+            <DotOrbitShader
+              width={size * 1.36}
+              height={size * 1.36}
+              colors={colors}
+              colorBack="#00000000"
+              size={view.dotSize}
+              sizeRange={0.4}
+              spreading={view.spreading}
+              stepsPerColor={1}
+              scale={0.62}
+              speed={view.shaderSpeed}
+              frame={BASE_FRAME}
+              minPixelRatio={2}
+              webGlContextAttributes={GL_ATTRIBUTES}
+            />
+          </div>
         ) : (
           <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: '50%' }}>
             {fallbackLayers.map((layer) => (
@@ -380,12 +409,14 @@ export const DotOrbit = ({
                 <div
                   style={{
                     position: 'absolute',
-                    inset: 0,
-                    borderRadius: '50%',
+                    inset: '-18%',
                     backgroundImage: layer.dots,
-                    backgroundSize: `${size * 0.14}px ${size * 0.14}px, ${size * 0.11}px ${size * 0.11}px`,
-                    backgroundPosition: `0 0, ${size * 0.05}px ${size * 0.06}px`,
-                    opacity: 'calc(0.5 + var(--orb-level, 0) * 0.5)',
+                    backgroundSize: `${size * 0.2}px ${size * 0.2}px, ${size * 0.15}px ${size * 0.15}px, ${size * 0.12}px ${size * 0.12}px`,
+                    backgroundPosition: `0 0, ${size * 0.07}px ${size * 0.08}px, ${size * 0.03}px ${size * 0.12}px`,
+                    transform: 'rotate(-18deg) scaleY(0.86)',
+                    maskImage: orbitMask,
+                    WebkitMaskImage: orbitMask,
+                    opacity: 'calc(0.6 + var(--orb-level, 0) * 0.4)',
                   }}
                 />
                 <div
@@ -408,7 +439,7 @@ export const DotOrbit = ({
             borderRadius: '50%',
             pointerEvents: 'none',
             backgroundImage:
-              'radial-gradient(circle at 31% 22%, rgba(255,255,255,0.5), transparent 14%), radial-gradient(circle at 30% 26%, rgba(255,255,255,0.24), transparent 48%), radial-gradient(circle at 68% 76%, rgba(10,14,24,0.45), transparent 60%)',
+              'radial-gradient(circle at 31% 22%, rgba(255,255,255,0.45), transparent 12%), radial-gradient(circle at 30% 26%, rgba(255,255,255,0.16), transparent 44%), radial-gradient(circle at 50% 118%, rgba(8,10,20,0.55), transparent 55%)',
           }}
         />
       </div>
