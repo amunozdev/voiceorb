@@ -297,6 +297,22 @@ export const orbs: OrbMeta[] = [
     ],
   },
   {
+    id: 'mercury-orb',
+    name: 'Mercury Orb',
+    tagline: 'Paper liquid-metal shader: chrome ripples flowing around a molten core.',
+    tech: 'Shader (canvas)',
+    dependencies: ['@paper-design/shaders-react'],
+    defaultColorFrom: '#cbd5e1',
+    defaultColorTo: '#a5b4fc',
+    defaultSize: 168,
+    files: [
+      { label: 'mercury-orb.tsx', path: 'src/registry/orbe/mercury-orb/mercury-orb.tsx', lang: 'tsx' },
+    ],
+  },
+];
+
+export const draftOrbs: OrbMeta[] = [
+  {
     id: 'minimal-orb',
     name: 'Minimal Orb',
     tagline: 'A single quiet disc: just breath and color. As minimal as it gets.',
@@ -361,19 +377,6 @@ export const orbs: OrbMeta[] = [
     defaultSize: 168,
     files: [
       { label: 'grain-orb.tsx', path: 'src/registry/orbe/grain-orb/grain-orb.tsx', lang: 'tsx' },
-    ],
-  },
-  {
-    id: 'mercury-orb',
-    name: 'Mercury Orb',
-    tagline: 'Paper liquid-metal shader: chrome ripples flowing around a molten core.',
-    tech: 'Shader (canvas)',
-    dependencies: ['@paper-design/shaders-react'],
-    defaultColorFrom: '#cbd5e1',
-    defaultColorTo: '#a5b4fc',
-    defaultSize: 168,
-    files: [
-      { label: 'mercury-orb.tsx', path: 'src/registry/orbe/mercury-orb/mercury-orb.tsx', lang: 'tsx' },
     ],
   },
 ];
