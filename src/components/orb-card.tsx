@@ -24,7 +24,7 @@ import { SegmentedControl } from './segmented-control';
 import { SPEED_PRESETS, sizePresetsForOrb } from './control-presets';
 import { InstallBlock } from './install-block';
 import { OpenInStackblitz } from './open-in-stackblitz';
-import { PlayIcon, PauseIcon, MicIcon, MicOffIcon, SoundIcon, SoundOffIcon } from './orb-icons';
+import { PlayIcon, PauseIcon, MicIcon, MicOffIcon, SoundIcon, SoundOffIcon, ArrowRightIcon } from './orb-icons';
 import { Select } from './select';
 import { useDemoCycle } from './use-demo-cycle';
 
@@ -218,9 +218,10 @@ ${usageFile.code}\`\`\``,
             {!hideDetailsLink && (
               <Link
                 href={`/orbs/${orb.id}`}
-                className="shrink-0 rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
               >
-                Details →
+                Details
+                <ArrowRightIcon />
               </Link>
             )}
           </div>

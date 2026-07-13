@@ -1,3 +1,5 @@
+import { ArrowRightIcon } from './orb-icons';
+
 const REPO_URL = 'https://github.com/amunozdev/voiceorbs';
 
 const PlusIcon = () => (
@@ -32,8 +34,9 @@ export const ComingSoonCard = () => (
       <span className="text-lg font-semibold text-foreground">Coming soon</span>
       <span className="text-sm text-muted">New orb designs are on the way.</span>
     </span>
-    <span className="text-xs font-medium text-muted transition-colors group-hover:text-accent-foreground group-focus-visible:text-accent-foreground">
-      Contribute on GitHub →
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors group-hover:text-accent-foreground group-focus-visible:text-accent-foreground">
+      Contribute on GitHub
+      <ArrowRightIcon />
     </span>
   </a>
 );
