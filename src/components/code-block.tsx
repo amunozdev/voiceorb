@@ -17,7 +17,11 @@ const toPrismLanguage = (lang: string): Language => {
 };
 
 export const CodeBlock = ({ files }: CodeBlockProps) => (
-  <Tabs.Root defaultValue={files[0]?.label} className="overflow-hidden rounded-lg border border-border bg-code">
+  <Tabs.Root
+    defaultValue={files[0]?.label}
+    className="overflow-hidden rounded-lg border border-code-border bg-code"
+    style={{ boxShadow: 'var(--code-shadow)' }}
+  >
     <Tabs.List className="flex flex-wrap gap-1 border-b border-code-border bg-code-tab px-2 py-1.5">
       {files.map((file) => (
         <Tabs.Trigger

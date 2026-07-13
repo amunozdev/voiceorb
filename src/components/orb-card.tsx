@@ -119,11 +119,13 @@ export const OrbCard = ({
   shared,
   adapters,
   hideDetailsLink = false,
+  hideHeader = false,
 }: {
   orb: OrbCardData;
   shared: FileWithCode[];
   adapters: AdapterFilesWithCode;
   hideDetailsLink?: boolean;
+  hideHeader?: boolean;
 }) => {
   const [state, setState] = useState<OrbState>('idle');
   const [mic, setMic] = useState(false);
@@ -209,20 +211,22 @@ ${usageFile.code}\`\`\``,
       id={orb.id}
       className="flex scroll-mt-20 flex-col gap-5 rounded-2xl border border-border bg-panel/60 p-5"
     >
-      <header className="flex flex-col gap-2">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="min-w-0 text-lg font-semibold">{orb.name}</h2>
-          {!hideDetailsLink && (
-            <Link
-              href={`/orbs/${orb.id}`}
-              className="shrink-0 rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
-            >
-              Details →
-            </Link>
-          )}
-        </div>
-        <p className="text-sm text-muted">{orb.tagline}</p>
-      </header>
+      {!hideHeader && (
+        <header className="flex flex-col gap-2">
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="min-w-0 text-lg font-semibold">{orb.name}</h2>
+            {!hideDetailsLink && (
+              <Link
+                href={`/orbs/${orb.id}`}
+                className="shrink-0 rounded-md border border-border bg-panel px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-foreground"
+              >
+                Details →
+              </Link>
+            )}
+          </div>
+          <p className="text-sm text-muted">{orb.tagline}</p>
+        </header>
+      )}
 
       <div className="flex flex-col gap-2.5">
         <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-[radial-gradient(circle_at_50%_30%,var(--orb-stage-from),var(--orb-stage-to))]">
@@ -388,7 +392,10 @@ ${usageFile.code}\`\`\``,
         </div>
         {orb.dependencies.length > 0 && <InstallBlock dependencies={orb.dependencies} />}
         {showPrompt && (
-          <div className="relative rounded-lg border border-border bg-code">
+          <div
+            className="relative rounded-lg border border-code-border bg-code"
+            style={{ boxShadow: 'var(--code-shadow)' }}
+          >
             <div className="absolute top-2 right-2 z-10">
               <CopyButton value={aiPrompt} label="Copy" />
             </div>

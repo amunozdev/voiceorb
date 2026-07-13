@@ -40,12 +40,13 @@
   --star: oklch(0.78 0.152 80);
   --orb-stage-from: var(--gray-3);
   --orb-stage-to: var(--gray-2);
-  --code-bg: var(--gray-11);
+  --code-bg: var(--gray-10);
   --code-fg: var(--gray-4);
-  --code-tab-bg: var(--gray-10);
+  --code-tab-bg: var(--gray-9);
   --code-muted: var(--gray-6);
   --code-border: var(--gray-8);
   --code-accent: var(--indigo-5);
+  --code-shadow: 0 1px 2px oklch(0.13 0.0143 275 / 0.08), 0 8px 24px oklch(0.13 0.0143 275 / 0.12);
 }
 
 .dark {
@@ -66,6 +67,7 @@
   --code-muted: var(--gray-6);
   --code-border: var(--gray-8);
   --code-accent: var(--indigo-5);
+  --code-shadow: none;
 }
 
 @theme inline {

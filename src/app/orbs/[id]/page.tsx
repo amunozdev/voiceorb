@@ -5,7 +5,7 @@ import { orbs } from '@/registry/registry';
 import { readAdapterFiles, readOrbFiles, readSharedFiles } from '@/registry/read-files';
 import { buildUsageSnippet } from '@/registry/prompt';
 import { OrbCard, type OrbCardData } from '@/components/orb-card';
-import { CopyButton } from '@/components/copy-button';
+import { CodePane } from '@/components/code-pane';
 import { PropsTable } from './props-table';
 
 export const dynamicParams = false;
@@ -39,17 +39,6 @@ export const generateMetadata = async ({
     },
   };
 };
-
-const CodePane = ({ code }: { code: string }) => (
-  <div className="relative rounded-lg border border-border bg-code">
-    <div className="absolute right-2 top-2 z-10">
-      <CopyButton value={code} label="Copy" />
-    </div>
-    <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-code-foreground">
-      {code}
-    </pre>
-  </div>
-);
 
 const wireSnippet = (component: string, id: string) => `'use client';
 import { useState } from 'react';
@@ -122,7 +111,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </header>
 
       <section aria-label="Playground" className="mb-14">
-        <OrbCard orb={data} shared={shared} adapters={adapters} hideDetailsLink />
+        <OrbCard orb={data} shared={shared} adapters={adapters} hideDetailsLink hideHeader />
       </section>
 
       <section className="mb-14">
